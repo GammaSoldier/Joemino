@@ -1,0 +1,55 @@
+package com.joekoperski.joemino;
+
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.Context;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.joekoperski.joemino.MainActivity;
+import com.joekoperski.joemino.R;
+
+public class DlgHighscore extends Dialog {
+
+    private MainActivity mContext;
+    private String name;
+
+    public DlgHighscore(Context context) {
+        super(context);
+        mContext = (MainActivity)context;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setCancelable(false);
+
+        setTitle( R.string.str_highscore );
+        setContentView(R.layout.enter_score);
+
+        Button buttonOK = (Button) findViewById(R.id.buttonOK);
+        TextView text = (TextView)findViewById( R.id.textViewScore );
+
+        text.setText( mContext.getString( R.string.str_yourscore, mContext.GetScore() ));
+
+        buttonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                EditText edit=(EditText)findViewById(R.id.editName);
+                String text=edit.getText().toString();
+
+                name=text;
+                mContext.SetHighscoreName( name );
+            }// onClick
+        });
+    }
+
+    public String getName() {
+        return name;
+    }
+}
