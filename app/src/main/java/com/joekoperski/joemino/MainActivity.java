@@ -1,6 +1,7 @@
 // TODO Sound
 // TODO Release Version
 // TODO adapt button extents to each screen resolution
+// TODO Playfield animation
 
 
 
@@ -40,7 +41,7 @@ public class MainActivity extends Activity {
         gameRules = new GameRules( playfield );
 
         gameView = new GameView( this );
-        gameView.setExtents( playfield.GetWidth(), playfield.GetHeight() );
+        gameView.setPlayfieldExtents( playfield.GetWidth(), playfield.GetHeight() );
 
         gameLayout = new FrameLayout(this);
         gameButtons = new RelativeLayout(this);

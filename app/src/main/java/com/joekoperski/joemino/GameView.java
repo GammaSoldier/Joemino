@@ -25,7 +25,7 @@ public class GameView extends SurfaceView implements Callback {
     private Point posPlayfieldScreen;
 
 	private int touchX, touchY;
-	private int mWidth, mHeight;
+	private int mPlayfieldExtentX, mPlayfieldExtentY;
 
 	private GfxLoopThread gfxLoopThread;
 
@@ -47,18 +47,15 @@ public class GameView extends SurfaceView implements Callback {
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	public void setExtents( int x, int y ) {
-		mWidth = x;
-		mHeight = y;
-	}// setExtents
+	public void setPlayfieldExtents(int x, int y ) {
+		mPlayfieldExtentX = x;
+		mPlayfieldExtentY = y;
+	}// setPlayfieldExtents
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		int x = getWidth();
-		int y = getHeight();
-
 		// Prapare graphics
 		Bitmap bmpTemp;
 		bmpTemp = BitmapFactory.decodeResource(getResources(), R.drawable.background);
@@ -72,8 +69,8 @@ public class GameView extends SurfaceView implements Callback {
         bmpTiles[3] = BitmapFactory.decodeResource(getResources(), R.drawable.tile4);
         bmpTiles[4] = BitmapFactory.decodeResource(getResources(), R.drawable.tile5);
 
-
-        posPlayfieldScreen = new Point( 0, (y - x) / 2 );
+        // position playfield at center of screen
+		posPlayfieldScreen = new Point( 0, (getHeight() - getWidth()) / 2 );
 
 		bmpPlayfieldScreen[ activePlayfieldScreen ] = Bitmap.createBitmap( getWidth(), getWidth(), bmpPlayfieldBackground.getConfig() );
 		gfxLoopThread = new GfxLoopThread(this);
@@ -116,6 +113,7 @@ public class GameView extends SurfaceView implements Callback {
     @Override
 	public void draw( Canvas canvas ) {
 		if( canvas != null ) {
+            super.draw(canvas);
             canvas.drawBitmap( bmpBackground, 0, 0, null );
             canvas.drawBitmap( bmpPlayfieldScreen[activePlayfieldScreen], posPlayfieldScreen.x, posPlayfieldScreen.y, null );
 		}// if
@@ -129,15 +127,8 @@ public class GameView extends SurfaceView implements Callback {
 			touchX = (int) event.getX();
 			touchY = (int) event.getY();
 
-			int width = getWidth();
-			int height = getHeight();
-
-			int x = (touchX -  posPlayfieldScreen.x)  / ( (width - 2 * posPlayfieldScreen.x) / mWidth ) ;
-			int y = (touchY -  posPlayfieldScreen.y)  / ( (height - 2 * posPlayfieldScreen.y) / mHeight ) ;
-			Log.d( "GameView", "touchX: " + touchX );
-			Log.d( "GameView", "touchY: " + touchY );
-			Log.d( "GameView", "x: " + x );
-			Log.d( "GameView", "y: " + y );
+			int x = (touchX -  posPlayfieldScreen.x) / ( getPlayfieldScreenWidth() / mPlayfieldExtentX) ;
+			int y = (touchY -  posPlayfieldScreen.y) / ( getPlayfieldScreenHeight() / mPlayfieldExtentY) ;
 
 			mContext.TileTouched( x, y );
 		}// if
@@ -147,20 +138,32 @@ public class GameView extends SurfaceView implements Callback {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 	public void renderPlayfield(Playfield playfield ) {
-        int width = getWidth();
-		int size = (width - 2 * posPlayfieldScreen.x) / mWidth;
+        int sizeX = getPlayfieldScreenWidth() / mPlayfieldExtentX;
+        int sizeY = getPlayfieldScreenHeight() / mPlayfieldExtentY;
 
-		bmpPlayfieldScreen[1 - activePlayfieldScreen] = Bitmap.createBitmap( width, width, bmpPlayfieldBackground.getConfig() );
+		bmpPlayfieldScreen[1 - activePlayfieldScreen] = Bitmap.createBitmap( getPlayfieldScreenWidth(), getPlayfieldScreenHeight(), bmpPlayfieldBackground.getConfig() );
 		Canvas canvas = new Canvas( bmpPlayfieldScreen[1 - activePlayfieldScreen] );
-		canvas.drawBitmap(bmpPlayfieldBackground, null, new Rect(0,0, width, width ), null);
+		canvas.drawBitmap(bmpPlayfieldBackground, null, new Rect(0,0, getPlayfieldScreenWidth(), getPlayfieldScreenHeight() ), null);
 
-		for( int j = 0; j < playfield.GetHeight(); j++ ) {
-			for (int i = 0; i < playfield.GetWidth(); i++) {
+		for( int j = 0; j < mPlayfieldExtentY; j++ ) {
+			for (int i = 0; i < mPlayfieldExtentX; i++) {
 				if( playfield.Get( i, j ) >= 0 ) {
-					canvas.drawBitmap(bmpTiles[ playfield.Get( i, j ) ], null, new Rect(i * size, j * size, (i + 1) * size - 1, (j + 1) * size - 1), null);
+					canvas.drawBitmap(bmpTiles[ playfield.Get( i, j ) ], null, new Rect(i * sizeX, j * sizeY, (i + 1) * sizeX - 1, (j + 1) * sizeY - 1), null);
 				}// if
 			}// for i
 		}// for j
 		activePlayfieldScreen = 1 - activePlayfieldScreen;
     }// renderPlayfield
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    private int getPlayfieldScreenWidth() {
+        return (getWidth() - 2 * posPlayfieldScreen.x);
+    }// getPlayfieldScreenWidth
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    private int getPlayfieldScreenHeight() {
+        return (getHeight() - 2 * posPlayfieldScreen.y);
+    }// getPlayfieldScreenHeight
 }// BitmapView
