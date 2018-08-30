@@ -56,8 +56,6 @@ public class MainActivity extends Activity {
                 RelativeLayout.LayoutParams.FILL_PARENT );
         gameButtons.setLayoutParams(params);
 
-
-
         // Button New
         ImageButton buttonNew = new ImageButton(this );
         buttonNew.setImageResource( R.drawable.button_new_images );
@@ -79,7 +77,6 @@ public class MainActivity extends Activity {
             }
         } );
 
-
         // Button Score
         ImageButton buttonScore = new ImageButton(this );
         buttonScore.setImageResource( R.drawable.button_score_images );
@@ -100,7 +97,6 @@ public class MainActivity extends Activity {
                 dlgScores.show();
             }
         } );
-
 
         // Button Exit
         ImageButton buttonExit = new ImageButton(this);
@@ -129,7 +125,7 @@ public class MainActivity extends Activity {
 
         setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().getDecorView().setBackgroundColor( 0x000000 );
-    }
+    }// onCreate
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,7 +134,7 @@ public class MainActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
+    }// onCreateOptionsMenu
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
@@ -166,7 +162,7 @@ public class MainActivity extends Activity {
         }// for i
         scores.save();
 
-    }
+    }// DeleteScores
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,14 +192,14 @@ public class MainActivity extends Activity {
         else {
             gameView.renderPlayfield( playfield );
         }// else
-    }
+    }// TileTouched
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     public void GUINotification( Boolean ready ) {
         if( ready ) {
             gameView.renderPlayfield( playfield );
-        }
-    }
+        }// if
+    }// GUINotification
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     public int GetScore() {
@@ -226,7 +222,7 @@ public class MainActivity extends Activity {
         }// for i
         scores.save();
         StartGame();
-    }
+    }// SetHighscoreName
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,8 +230,6 @@ public class MainActivity extends Activity {
         playfield = new Playfield();
         gameRules = new GameRules( playfield );
         gameView.renderPlayfield( playfield );
+    }// StartGame
 
-    }
-
-
-}
+}// MainActivity
