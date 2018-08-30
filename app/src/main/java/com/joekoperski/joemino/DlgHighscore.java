@@ -5,6 +5,8 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -36,6 +38,9 @@ public class DlgHighscore extends Dialog {
 
         text.setText( mContext.getString( R.string.str_yourscore, mContext.GetScore() ));
 
+        // automatically show keyboard
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
         buttonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,7 +50,7 @@ public class DlgHighscore extends Dialog {
 
                 name=text;
                 mContext.SetHighscoreName( name );
-            }// onClick
+           }// onClick
         });
     }
 

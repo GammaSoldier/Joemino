@@ -5,8 +5,10 @@ android {
     buildToolsVersion "28.0.2"
     defaultConfig {
         applicationId "com.joekoperski.joemino"
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 17
+        versionCode 1
+        versionName "1.00.000"
     }
     buildTypes {
         release {
@@ -19,5 +21,5 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:18.0.0'
+    compile 'com.android.support:support-v4:22.2.1'
 }
