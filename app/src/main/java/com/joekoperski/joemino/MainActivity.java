@@ -25,14 +25,14 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 public class MainActivity extends Activity {
 
     private GameView gameView;
-    private FrameLayout gameLayout;// Sort of "holder" for everything we are placing
-    private RelativeLayout gameButtons;//Holder for the buttons
     private Playfield playfield;
     private GameRules gameRules;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FrameLayout gameLayout;// Sort of "holder" for everything we are placing
+        RelativeLayout gameButtons;//Holder for the buttons
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -173,7 +173,6 @@ public class MainActivity extends Activity {
         if( gameRules.makeMove( playfield, x, y ) == gameRules.GAMEOVER ) {
             gameView.renderPlayfield( playfield );
 
-            HighscoreEntry highscoreEntry = new HighscoreEntry();
             Scores scores = new Scores( this );
 
             for( int i = 0; i < scores.getNumScores(); i++ ){
