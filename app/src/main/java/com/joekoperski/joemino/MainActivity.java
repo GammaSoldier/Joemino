@@ -9,18 +9,17 @@ package com.joekoperski.joemino;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
-
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public class MainActivity extends Activity {
 
@@ -46,30 +45,17 @@ public class MainActivity extends Activity {
         gameLayout = new FrameLayout(this);
         gameButtons = new RelativeLayout(this);
 
-        //Define the layout parameter for the button to wrap the content for both width and height
-        RelativeLayout.LayoutParams layoutButtonNew = new RelativeLayout.LayoutParams( WRAP_CONTENT, WRAP_CONTENT );
-        RelativeLayout.LayoutParams layoutButtonScore = new RelativeLayout.LayoutParams( WRAP_CONTENT, WRAP_CONTENT );
-        RelativeLayout.LayoutParams layoutButtonExit = new RelativeLayout.LayoutParams( WRAP_CONTENT, WRAP_CONTENT );
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.FILL_PARENT,
-                RelativeLayout.LayoutParams.FILL_PARENT );
-        gameButtons.setLayoutParams(params);
+        Display theDisplay = getWindowManager().getDefaultDisplay();
+        Point displaySize = new Point();
+        theDisplay.getSize(displaySize);
+        float ratioX = 336f / 1080f;
+        float ratioY = 189f / 1920f;
+        Point buttonSize = new Point( (int) ((float) (displaySize.x) * ratioX), (int) ((float) (displaySize.y) * ratioY));
+        Point position;
 
         // Button New
-        ImageButton buttonNew = new ImageButton(this );
-        buttonNew.setImageResource( R.drawable.button_new_images );
-        buttonNew.setAdjustViewBounds( true );
-        buttonNew.setBackgroundColor( 0 );  // transparent background
-        gameButtons.addView(  buttonNew );
-        layoutButtonNew.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE );
-        layoutButtonNew.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE );
-
-        layoutButtonNew.width = 336;
-        layoutButtonNew.height = 189;
-
-        buttonNew.setLayoutParams(layoutButtonNew);
-
+        position = new Point( 0,displaySize.y - buttonSize.y );
+        SizedImageButton buttonNew = new SizedImageButton( this, R.drawable.button_new_images, buttonSize, position );
         buttonNew.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 gameRules = new GameRules( playfield );
@@ -78,19 +64,8 @@ public class MainActivity extends Activity {
         } );
 
         // Button Score
-        ImageButton buttonScore = new ImageButton(this );
-        buttonScore.setImageResource( R.drawable.button_score_images );
-        buttonScore.setAdjustViewBounds( true );
-        buttonScore.setBackgroundColor( 0 );  // transparent background
-        gameButtons.addView(  buttonScore );
-        layoutButtonScore.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE );
-        layoutButtonScore.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE );
-
-        layoutButtonScore.width = 336;
-        layoutButtonScore.height = 189;
-
-        buttonScore.setLayoutParams(layoutButtonScore);
-
+        position = new Point( (displaySize.x - buttonSize.x) / 2,displaySize.y - buttonSize.y );
+        SizedImageButton buttonScore = new SizedImageButton( this, R.drawable.button_score_images, buttonSize, position );
         buttonScore.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 DlgScores dlgScores = new DlgScores( MainActivity.this );
@@ -99,25 +74,20 @@ public class MainActivity extends Activity {
         } );
 
         // Button Exit
-        ImageButton buttonExit = new ImageButton(this);
-        buttonExit.setImageResource( R.drawable.button_exit_images );
-        buttonExit.setAdjustViewBounds( true );
-        buttonExit.setBackgroundColor( 0 );  // transparent background
-        gameButtons.addView( buttonExit );
-        layoutButtonExit.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-        layoutButtonExit.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-
-        layoutButtonExit.width = 336;
-        layoutButtonExit.height = 189;
-
-        buttonExit.setLayoutParams(layoutButtonExit);
-
+        position = new Point( displaySize.x - buttonSize.x,displaySize.y - buttonSize.y );
+        SizedImageButton buttonExit = new SizedImageButton( this, R.drawable.button_exit_images, buttonSize, position );
         buttonExit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Exit the app
                 moveTaskToBack(true);
             }
         } );
+
+
+        gameButtons.addView(  buttonNew );
+        gameButtons.addView(  buttonScore );
+        gameButtons.addView(  buttonExit );
+
 
         gameLayout.addView(gameView);
         gameLayout.addView(gameButtons);
