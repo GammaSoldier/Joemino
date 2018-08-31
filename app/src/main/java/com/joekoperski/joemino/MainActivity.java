@@ -5,6 +5,7 @@
 
 
 
+
 package com.joekoperski.joemino;
 
 import android.app.Activity;
@@ -48,6 +49,7 @@ public class MainActivity extends Activity {
         Display theDisplay = getWindowManager().getDefaultDisplay();
         Point displaySize = new Point();
         theDisplay.getSize(displaySize);
+        // TODO replace constants by variables
         float ratioX = 336f / 1080f;
         float ratioY = 189f / 1920f;
         Point buttonSize = new Point( (int) ((float) (displaySize.x) * ratioX), (int) ((float) (displaySize.y) * ratioY));

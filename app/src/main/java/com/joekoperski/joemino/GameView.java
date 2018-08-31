@@ -56,21 +56,31 @@ public class GameView extends SurfaceView implements Callback {
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
+		// position playfield at center of screen
+		posPlayfieldScreen = new Point( 0, (getHeight() - getWidth()) / 2 );
+
 		// Prapare graphics
 		Bitmap bmpTemp;
 		bmpTemp = BitmapFactory.decodeResource(getResources(), R.drawable.background);
 		bmpBackground = Bitmap.createScaledBitmap( bmpTemp, getWidth(), getHeight(), true );
-        bmpPlayfieldBackground = BitmapFactory.decodeResource(getResources(), R.drawable.playfield);
+		bmpTemp = BitmapFactory.decodeResource(getResources(), R.drawable.playfield);
+		bmpPlayfieldBackground = Bitmap.createScaledBitmap( bmpTemp, getPlayfieldScreenWidth(), getPlayfieldScreenHeight(), true );
 
 		bmpTiles = new Bitmap[5];
-        bmpTiles[0] = BitmapFactory.decodeResource(getResources(), R.drawable.tile1);
-        bmpTiles[1] = BitmapFactory.decodeResource(getResources(), R.drawable.tile2);
-        bmpTiles[2] = BitmapFactory.decodeResource(getResources(), R.drawable.tile3);
-        bmpTiles[3] = BitmapFactory.decodeResource(getResources(), R.drawable.tile4);
-        bmpTiles[4] = BitmapFactory.decodeResource(getResources(), R.drawable.tile5);
+		bmpTiles[0] = BitmapFactory.decodeResource(getResources(), R.drawable.glass1);
+		bmpTiles[1] = BitmapFactory.decodeResource(getResources(), R.drawable.glass2);
+		bmpTiles[2] = BitmapFactory.decodeResource(getResources(), R.drawable.glass3);
+		bmpTiles[3] = BitmapFactory.decodeResource(getResources(), R.drawable.glass4);
+		bmpTiles[4] = BitmapFactory.decodeResource(getResources(), R.drawable.glass5);
 
-        // position playfield at center of screen
-		posPlayfieldScreen = new Point( 0, (getHeight() - getWidth()) / 2 );
+/*
+		bmpTiles[0] = BitmapFactory.decodeResource(getResources(), R.drawable.tile1);
+		bmpTiles[1] = BitmapFactory.decodeResource(getResources(), R.drawable.tile2);
+		bmpTiles[2] = BitmapFactory.decodeResource(getResources(), R.drawable.tile3);
+		bmpTiles[3] = BitmapFactory.decodeResource(getResources(), R.drawable.tile4);
+		bmpTiles[4] = BitmapFactory.decodeResource(getResources(), R.drawable.tile5);
+*/
+
 
 		bmpPlayfieldScreen[ activePlayfieldScreen ] = Bitmap.createBitmap( getWidth(), getWidth(), bmpPlayfieldBackground.getConfig() );
 		gfxLoopThread = new GfxLoopThread(this);
