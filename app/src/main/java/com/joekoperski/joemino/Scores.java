@@ -10,7 +10,7 @@ public class Scores {
     private Context mContext;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public Scores( Context context) {
+    Scores( Context context) {
         numScores = 5;
         entry = new HighscoreEntry[numScores];
         for( int i = 0; i< numScores; i++ ) {
@@ -25,7 +25,6 @@ public class Scores {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     public void load() {
         SharedPreferences pref = mContext.getSharedPreferences("Preferences", mContext. MODE_PRIVATE); // 0 - for private mode
-        SharedPreferences.Editor editor = pref.edit();
 
         for( int i = 0; i < numScores; i++ ) {
             entry[i].score = pref.getInt("Score"+i, -1); // getting Integer
@@ -44,14 +43,9 @@ public class Scores {
             editor.putString("Name"+i, entry[i].name); // Storing string
             editor.putInt("Score"+i, entry[i].score); // Storing integer
         }// for i
-        editor.commit();
+//        editor.commit();
+        editor.apply();
     }// save
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    public void delete() {
-
-    }// delete
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,6 +58,7 @@ public class Scores {
     public HighscoreEntry getAt( int pos ) {
         return entry[pos];
     }// getAt
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     public void insertAt( int pos, HighscoreEntry newEntry ) {

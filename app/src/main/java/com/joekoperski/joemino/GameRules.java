@@ -11,7 +11,7 @@ public class GameRules {
     private int mScore;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public GameRules( Playfield playfield ) {
+    GameRules( Playfield playfield ) {
         mScore = playfield.GetHeight() * playfield.GetWidth();
 
         Random rnd = new Random();
@@ -28,11 +28,10 @@ public class GameRules {
     public int makeMove( Playfield playfield, int x, int y ) {
         int actualTile;
         int retVal = 1;
-        int removed = 0;
         // is validTile
         if ( playfield.isValid(x, y) ) {
             actualTile = playfield.Get( x, y );
-            removed = deleteNeighbours( playfield, x, y );
+            int removed = deleteNeighbours( playfield, x, y );
             if( removed == 1 ){
                 playfield.Set( x, y, actualTile );
                 retVal = FORBIDDEN;
@@ -199,10 +198,9 @@ public class GameRules {
         if( score < 0 ) {
             return true;
         }// if
-        if( mScore > score ) {
-            return false;
-        }// if
-        return true;
+        else {
+            return (mScore <= score );
+        }// else
     }// compareScore
 
 }

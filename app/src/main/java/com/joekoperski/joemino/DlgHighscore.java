@@ -1,25 +1,21 @@
 package com.joekoperski.joemino;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.joekoperski.joemino.MainActivity;
-import com.joekoperski.joemino.R;
 
 public class DlgHighscore extends Dialog {
 
     private MainActivity mContext;
     private String name;
 
-    public DlgHighscore(Context context) {
+    DlgHighscore(Context context) {
         super(context);
         mContext = (MainActivity)context;
     }
@@ -46,9 +42,8 @@ public class DlgHighscore extends Dialog {
             public void onClick(View v) {
                 dismiss();
                 EditText edit=(EditText)findViewById(R.id.editName);
-                String text=edit.getText().toString();
+                name=edit.getText().toString();
 
-                name=text;
                 mContext.SetHighscoreName( name );
            }// onClick
         });

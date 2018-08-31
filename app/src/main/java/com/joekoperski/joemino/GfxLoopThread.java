@@ -5,11 +5,11 @@ import android.util.Log;
 
 public class GfxLoopThread extends Thread {
 
-	static final long FPS = 60;
+	private static final long FPS = 60;
 	private GameView theView;
 	private boolean isRunning = false;
 	
-	public GfxLoopThread(GameView theView) {
+	GfxLoopThread(GameView theView) {
 		this.theView = theView;
 	}
 

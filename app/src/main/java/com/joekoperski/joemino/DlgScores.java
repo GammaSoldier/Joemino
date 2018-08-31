@@ -12,7 +12,7 @@ public class DlgScores extends Dialog {
     private MainActivity parent;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public DlgScores(MainActivity context) {
+    DlgScores(MainActivity context) {
         super(context);
         parent = context;
     }// DlgScores
