@@ -1,6 +1,5 @@
 package com.joekoperski.joemino;
 
-import java.util.Random;
 
 public class Playfield {
     private int mPlayfield[][];
@@ -9,11 +8,10 @@ public class Playfield {
     private int numTiles;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public Playfield() {
+    Playfield() {
         width = 12;
         height = 12;
         numTiles = 5;
-        Random rnd = new Random();
 
         mPlayfield = new int[ width][ height ];
     }// Playfield
@@ -37,10 +35,7 @@ public class Playfield {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     public Boolean isValid( int x, int y ) {
-        if( isInside(x, y ) && mPlayfield[x][y] >= 0 )
-            return true;
-        else
-            return false;
+        return ( isInside(x, y ) && mPlayfield[x][y] >= 0 );
     }// isValid
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,12 +58,7 @@ public class Playfield {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     private Boolean isInside( int x, int y ){
-        if( x >= 0 && x < width && y >=0 && y < height ) {
-            return true;
-        }// if
-         else {
-            return false;
-        }// else
+        return( x >= 0 && x < width && y >=0 && y < height );
     }// isInside
 
 }// class Playfield
