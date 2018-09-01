@@ -21,6 +21,8 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class MainActivity extends Activity {
 
@@ -85,11 +87,9 @@ public class MainActivity extends Activity {
             }
         } );
 
-
         gameButtons.addView(  buttonNew );
         gameButtons.addView(  buttonScore );
         gameButtons.addView(  buttonExit );
-
 
         gameLayout.addView(gameView);
         gameLayout.addView(gameButtons);
@@ -141,29 +141,44 @@ public class MainActivity extends Activity {
     public void TileTouched(int x, int y ) {
         Boolean isHighscore = false;
         Log.d("MainActivity", "TileTouched");
+        int moveResult;
 
-        if( gameRules.makeMove( playfield, x, y ) == gameRules.GAMEOVER ) {
+        moveResult = gameRules.makeMove( playfield, x, y );
+
+        while(  moveResult == GameRules.CONTINUE_MOVE ) {
+            // aninmate
             gameView.renderPlayfield( playfield );
+            moveResult = gameRules.makeMove( playfield, x, y );
+        }// while
 
-            Scores scores = new Scores( this );
+        gameView.renderPlayfield( playfield );
 
-            for( int i = 0; i < scores.getNumScores(); i++ ){
-                if( gameRules.compareScore( scores.getAt(i).score) ) {
-                    DlgHighscore dlgHighscore = new DlgHighscore( MainActivity.this );
-                    dlgHighscore.show();
-                    isHighscore = true;
-                    break;
+        switch (moveResult) {
+            case GameRules.CONTINUE:
+                // next move possible
+                break;
+            case GameRules.GAMEOVER:
+                Scores scores = new Scores( this );
+
+                for( int i = 0; i < scores.getNumScores(); i++ ){
+                    if( gameRules.compareScore( scores.getAt(i).score) ) {
+                        DlgHighscore dlgHighscore = new DlgHighscore( MainActivity.this );
+                        dlgHighscore.show();
+                        isHighscore = true;
+                        break;
+                    }// if
+                }// for i
+                if( !isHighscore ){
+                    DlgGameOver dialog = new DlgGameOver( this );
+                    dialog.show();
                 }// if
-            }// for i
-            if( !isHighscore ){
-                DlgGameOver dialog = new DlgGameOver( this );
-                dialog.show();
-            }// if
-        }// if
-        else {
-            gameView.renderPlayfield( playfield );
-        }// else
+                break;
+            default:    // FORBIDDEN
+                // do nothing
+        }// switch
     }// TileTouched
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     public void GUINotification( Boolean ready ) {
@@ -171,6 +186,7 @@ public class MainActivity extends Activity {
             gameView.renderPlayfield( playfield );
         }// if
     }// GUINotification
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     public int GetScore() {

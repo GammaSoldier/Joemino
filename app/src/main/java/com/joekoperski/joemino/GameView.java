@@ -12,6 +12,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class GameView extends SurfaceView implements Callback {
 
@@ -146,10 +148,11 @@ public class GameView extends SurfaceView implements Callback {
 	}// onTouchEvent
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////
+/*
 	public void renderPlayfield(Playfield playfield ) {
-        int sizeX = getPlayfieldScreenWidth() / mPlayfieldExtentX;
-        int sizeY = getPlayfieldScreenHeight() / mPlayfieldExtentY;
+		int sizeX = getPlayfieldScreenWidth() / mPlayfieldExtentX;
+		int sizeY = getPlayfieldScreenHeight() / mPlayfieldExtentY;
 
 		bmpPlayfieldScreen[1 - activePlayfieldScreen] = Bitmap.createBitmap( getPlayfieldScreenWidth(), getPlayfieldScreenHeight(), bmpPlayfieldBackground.getConfig() );
 		Canvas canvas = new Canvas( bmpPlayfieldScreen[1 - activePlayfieldScreen] );
@@ -163,10 +166,83 @@ public class GameView extends SurfaceView implements Callback {
 			}// for i
 		}// for j
 		activePlayfieldScreen = 1 - activePlayfieldScreen;
-    }// renderPlayfield
+	}// renderPlayfield
+*/
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	public void renderPlayfield(Playfield playfield ) {
+		int sizeX = getPlayfieldScreenWidth() / mPlayfieldExtentX;
+		int sizeY = getPlayfieldScreenHeight() / mPlayfieldExtentY;
+
+		//render tiles
+		Boolean animationRunning = false;
+
+		double  smoothStep = 0.5;
+		do{
+            // render background
+            bmpPlayfieldScreen[1 - activePlayfieldScreen] = Bitmap.createBitmap( getPlayfieldScreenWidth(), getPlayfieldScreenHeight(), bmpPlayfieldBackground.getConfig() );
+            Canvas canvas = new Canvas( bmpPlayfieldScreen[1 - activePlayfieldScreen] );
+            canvas.drawBitmap(bmpPlayfieldBackground, null, new Rect(0,0, getPlayfieldScreenWidth(), getPlayfieldScreenHeight() ), null);
+			animationRunning = false;
+
+			for (int j = mPlayfieldExtentY - 1; j >= 0; j--) {
+				for (int i = mPlayfieldExtentX - 1; i >= 0; i--) {
+					if (playfield.Get(i, j) >= 0) {
+						Point moveTo = playfield.GetMovemap(i, j);
+
+						if (moveTo.x > i) {
+							// move tile horizontally
+							canvas.drawBitmap(bmpTiles[playfield.Get(i, j)], null, new Rect( i * sizeX + (int)(sizeX * smoothStep), j * sizeY, (i + 1 ) * sizeX - 1 + (int)(sizeX * smoothStep), (j + 1) * sizeY - 1), null);
+
+							if( smoothStep >= 1.0) {
+								playfield.SetMovemap(i + 1, j, moveTo);
+								playfield.SetMovemap(i, j, new Point(i, j));
+								playfield.Set(i + 1, j, playfield.Get(i, j));
+								playfield.Set(i, j, -1);
+							}// if
+							animationRunning = true;
+						}// if
+						else if (moveTo.y > j) {
+							// move tile vertically
+							canvas.drawBitmap(bmpTiles[playfield.Get(i, j)], null, new Rect(i * sizeX, j * sizeY + (int)(sizeY * smoothStep), (i + 1) * sizeX - 1, (j + 1) * sizeY - 1 + (int)(sizeY * smoothStep)), null);
+
+							if( smoothStep >= 1.0) {
+								playfield.SetMovemap(i, j + 1, moveTo);
+								playfield.SetMovemap(i, j, new Point(i, j));
+								playfield.Set(i, j + 1, playfield.Get(i, j));
+								playfield.Set(i, j, -1);
+							}// if
+							animationRunning = true;
+
+						}// if
+						else {
+							canvas.drawBitmap(bmpTiles[playfield.Get(i, j)], null, new Rect(i * sizeX, j * sizeY, (i + 1) * sizeX - 1, (j + 1) * sizeY - 1), null);
+						}// else
+					}// if
+				}// for i
+			}// for j
+            activePlayfieldScreen = 1 - activePlayfieldScreen;
+			if( animationRunning ){
+
+				smoothStep += 0.5;
+				if( smoothStep > 1 ){
+					smoothStep = 0.5;
+				}
+
+				try {
+					TimeUnit.MILLISECONDS.sleep(1);
+				} // try
+				catch (InterruptedException exeption) {
+					// TODO anything to do here?
+				}// catch
+			}// if
+
+		} while( animationRunning );
+	}// renderPlayfield
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
     private int getPlayfieldScreenWidth() {
         return (getWidth() - 2 * posPlayfieldScreen.x);
     }// getPlayfieldScreenWidth
