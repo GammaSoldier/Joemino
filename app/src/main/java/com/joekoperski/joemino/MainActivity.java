@@ -1,9 +1,8 @@
 // TODO Sound
 // TODO Release Version
-// TODO adapt button extents to each screen resolution
-// TODO Playfield animation
-
-
+// TODO display scores
+// TODO use custom font for dialogs (https://stackoverflow.com/questions/27588965/how-to-use-custom-font-in-a-project-written-in-android-studio)
+// TODO optimize rendering for speed
 
 
 package com.joekoperski.joemino;
