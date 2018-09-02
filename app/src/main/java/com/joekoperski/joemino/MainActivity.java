@@ -1,14 +1,16 @@
-// TODO Sound
-// TODO Release Version
 // TODO display scores
 // TODO use custom font for dialogs (https://stackoverflow.com/questions/27588965/how-to-use-custom-font-in-a-project-written-in-android-studio)
-
+// TODO explode tiles
+// TODO Release Version
 
 package com.joekoperski.joemino;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -19,14 +21,19 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import java.util.concurrent.TimeUnit;
-
 
 public class MainActivity extends Activity {
+
+    private static final int SOUND_CLICK = 0;
+    private static final int SOUND_VICTORY = 1;
+    private static final int SOUND_GAMEOVER = 2;
 
     private GameView gameView;
     private Playfield playfield;
     private GameRules gameRules;
+
+    static SoundPool soundPool;
+    static int[] sm;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
@@ -94,6 +101,24 @@ public class MainActivity extends Activity {
 
         setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().getDecorView().setBackgroundColor( 0x000000 );
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            soundPool = new SoundPool.Builder()
+                    .setMaxStreams(1)
+                    .build();
+        } else {
+            soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+        }
+
+        // initialize sounds
+        sm = new int[3];
+        sm[SOUND_CLICK] = soundPool.load(this, R.raw.click, 1);
+        sm[SOUND_VICTORY] = soundPool.load(this, R.raw.victory, 1);
+        sm[SOUND_GAMEOVER] = soundPool.load(this, R.raw.gameover, 1);
+
+
     }// onCreate
 
 
@@ -141,6 +166,9 @@ public class MainActivity extends Activity {
         int moveResult;
 
         moveResult = gameRules.makeMove( playfield, x, y );
+        if( moveResult == GameRules.CONTINUE_MOVE) {
+            PlaySound( SOUND_CLICK );
+        }
 
         while(  moveResult == GameRules.CONTINUE_MOVE ) {
             // aninmate
@@ -159,6 +187,7 @@ public class MainActivity extends Activity {
 
                 for( int i = 0; i < scores.getNumScores(); i++ ){
                     if( gameRules.compareScore( scores.getAt(i).score) ) {
+                        PlaySound( SOUND_VICTORY );
                         DlgHighscore dlgHighscore = new DlgHighscore( MainActivity.this );
                         dlgHighscore.show();
                         isHighscore = true;
@@ -166,6 +195,7 @@ public class MainActivity extends Activity {
                     }// if
                 }// for i
                 if( !isHighscore ){
+                    PlaySound( SOUND_GAMEOVER );
                     DlgGameOver dialog = new DlgGameOver( this );
                     dialog.show();
                 }// if
@@ -216,4 +246,10 @@ public class MainActivity extends Activity {
         gameView.renderPlayfieldFirstTime( playfield );
     }// StartGame
 
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    private void PlaySound( int id ) {
+        soundPool.play(sm[id], 1, 1, 1, 0, 1f);
+    }
 }// MainActivity
