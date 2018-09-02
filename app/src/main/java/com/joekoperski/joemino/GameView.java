@@ -256,7 +256,14 @@ public class GameView extends SurfaceView implements Callback {
 				}// if
 			}// if
 
-            while( waitForDraw );
+            while( waitForDraw ){
+                try {
+                    TimeUnit.MILLISECONDS.sleep(1);
+                } // try
+                catch (InterruptedException exeption) {
+                    // TODO anything to do here?
+                }// catch
+            };
 		} while( animationRunning );
 
 	}// renderPlayfield

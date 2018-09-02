@@ -47,7 +47,7 @@ public class GfxLoopThread extends Thread {
 				if (sleepTime > 0)
 					sleep(sleepTime);
 				else
-					sleep(10);
+					sleep(1);
 			}// try 
 			catch (InterruptedException e) {}
 		}// while
