@@ -2,7 +2,6 @@
 // TODO Release Version
 // TODO display scores
 // TODO use custom font for dialogs (https://stackoverflow.com/questions/27588965/how-to-use-custom-font-in-a-project-written-in-android-studio)
-// TODO optimize rendering for speed
 
 
 package com.joekoperski.joemino;
@@ -61,8 +60,7 @@ public class MainActivity extends Activity {
         SizedImageButton buttonNew = new SizedImageButton( this, R.drawable.button_new_images, buttonSize, position );
         buttonNew.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                gameRules = new GameRules( playfield );
-                gameView.renderPlayfield( playfield );
+                StartGame();
             }
         } );
 
@@ -182,7 +180,7 @@ public class MainActivity extends Activity {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     public void GUINotification( Boolean ready ) {
         if( ready ) {
-            gameView.renderPlayfield( playfield );
+            gameView.renderPlayfieldFirstTime( playfield );
         }// if
     }// GUINotification
 
@@ -215,7 +213,7 @@ public class MainActivity extends Activity {
     public void StartGame() {
         playfield = new Playfield();
         gameRules = new GameRules( playfield );
-        gameView.renderPlayfield( playfield );
+        gameView.renderPlayfieldFirstTime( playfield );
     }// StartGame
 
 }// MainActivity

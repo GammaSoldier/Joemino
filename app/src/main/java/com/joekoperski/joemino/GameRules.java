@@ -25,14 +25,13 @@ public class GameRules {
 
         Random rnd = new Random();
 
-
 /*
         int testMap[][] = {
                  {-1,-1, 2,-1,-1,-1}
                 ,{ 1, 1, 3, 3, 4,-1}
-                ,{ 1, 1, 3, 3, 1,-1}
+                ,{ 0, 1, 3, 3, 1,-1}
                 ,{ 1, 1, 2, 2, 2, 3}
-                ,{ 1, 1, 2, 4, 2, 1}
+                ,{ 1, 0, 2, 4, 2, 1}
                 ,{ 1, 1, 2, 3, 2, 3}
         };
 */
@@ -46,6 +45,15 @@ public class GameRules {
                 playfield.SetMovemap(i, j, new Point( i, j ));
             }// for i
         }// for j
+
+// debug
+/*
+        for( int j=0; j< playfield.GetHeight(); j++ ) {
+            playfield.Set( playfield.GetWidth() - 2, j , 1 );
+            playfield.SetDestinationMap( playfield.GetWidth() - 2, j , 1 );
+        }
+*/
+
         moveState = STATE_DELETE;
     }// GameRules
 
@@ -154,22 +162,6 @@ public class GameRules {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-    private void dropColumn( Playfield playfield ) {
-        for( int j = playfield.GetHeight() - 1; j >= 0; j-- ) {
-            for( int i = 0; i < playfield.GetWidth(); i++ ) {
-                if( playfield.Get( i, j) == -1 ) {
-                    if( isUpperColumn( playfield, i, j ) ) {
-                        dropTile( playfield, i, j );
-//                        playfield.SetMovemap(i, j-1, new Point(i, j));
-                    }// if
-                }// if
-            }//  for i
-        }// for j
-    }// dropColumn
-*/
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
     private void dropColumn( Playfield playfield ) {
 
         for( int i = 0; i < playfield.GetWidth(); i++ ) {
@@ -209,16 +201,6 @@ public class GameRules {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-/*    private void compress( Playfield playfield ) {
-        for( int i =playfield.GetWidth() - 1; i > 0; i--) {
-            if(  playfield.Get( i, playfield.GetHeight() - 1 ) == -1 ) {
-                alignColumn( playfield, i );
-            }// if
-        }//for i
-    }*/// compress
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
     private void compress( Playfield playfield ) {
         int moveStep = 0;
         Boolean found = false;
@@ -252,25 +234,7 @@ public class GameRules {
                 return true;
         }// for i
         return false;
-
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-    private void alignColumn( Playfield playfield, int i ) {
-        if( i > 0) {
-            if( playfield.Get( i-1, playfield.GetHeight() - 1 ) == -1 ) {
-                alignColumn( playfield, i-1 );
-            }//if
-
-            for( int j=0; j<playfield.GetHeight(); j++) {
-                playfield.Set( i, j, playfield.Get( i-1, j ));
-                playfield.Set( i-1, j, -1 );
-            }// for j
-        }// if
-    }// alignColumn
-*/
+    }// isUpperColumn
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public class GameView extends SurfaceView implements Callback {
 
-	private final static float SMOOTH_ANIMATION_STEP_SIZE = 0.2f;
+	private final static float SMOOTH_ANIMATION_STEP_SIZE = 0.5f;
 
 	private SurfaceHolder surfaceHolder;
 	private Bitmap bmpTiles[];
@@ -32,7 +32,7 @@ public class GameView extends SurfaceView implements Callback {
 	private int mPlayfieldExtentX, mPlayfieldExtentY;
 
 	private GfxLoopThread gfxLoopThread;
-
+    private Boolean waitForDraw;
 	private MainActivity mContext;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,6 +47,9 @@ public class GameView extends SurfaceView implements Callback {
 
 		surfaceHolder = getHolder();
 		surfaceHolder.addCallback(this);
+
+        waitForDraw = false;
+
 	}// GameView
 
 
@@ -84,7 +87,6 @@ public class GameView extends SurfaceView implements Callback {
 		bmpTiles[3] = BitmapFactory.decodeResource(getResources(), R.drawable.tile4);
 		bmpTiles[4] = BitmapFactory.decodeResource(getResources(), R.drawable.tile5);
 */
-
 
 		bmpPlayfieldScreen[ activePlayfieldScreen ] = Bitmap.createBitmap( getWidth(), getWidth(), bmpPlayfieldBackground.getConfig() );
 		gfxLoopThread = new GfxLoopThread(this);
@@ -126,6 +128,7 @@ public class GameView extends SurfaceView implements Callback {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
 	public void draw( Canvas canvas ) {
+        waitForDraw = false;
 		if( canvas != null ) {
             super.draw(canvas);
             canvas.drawBitmap( bmpBackground, 0, 0, null );
@@ -151,8 +154,7 @@ public class GameView extends SurfaceView implements Callback {
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-	public void renderPlayfield(Playfield playfield ) {
+	public void renderPlayfieldFirstTime(Playfield playfield ) {
 		int sizeX = getPlayfieldScreenWidth() / mPlayfieldExtentX;
 		int sizeY = getPlayfieldScreenHeight() / mPlayfieldExtentY;
 
@@ -163,13 +165,13 @@ public class GameView extends SurfaceView implements Callback {
 		for( int j = 0; j < mPlayfieldExtentY; j++ ) {
 			for (int i = 0; i < mPlayfieldExtentX; i++) {
 				if( playfield.Get( i, j ) >= 0 ) {
-					canvas.drawBitmap(bmpTiles[ playfield.Get( i, j ) ], null, new Rect(i * sizeX, j * sizeY, (i + 1) * sizeX - 1, (j + 1) * sizeY - 1), null);
+					canvas.drawBitmap(bmpTiles[ playfield.Get( i, j ) ], null, new Rect(i * sizeX, j * sizeY, (i + 1) * sizeX, (j + 1) * sizeY), null);
 				}// if
 			}// for i
 		}// for j
 		activePlayfieldScreen = 1 - activePlayfieldScreen;
-	}// renderPlayfield
-*/
+	}// renderPlayfieldFirstTime
+
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,10 +184,12 @@ public class GameView extends SurfaceView implements Callback {
 
 		float smoothAnimationStep = SMOOTH_ANIMATION_STEP_SIZE;
 		do{
-            // render background
+            waitForDraw = true;
+		    // render background
             bmpPlayfieldScreen[1 - activePlayfieldScreen] = Bitmap.createBitmap( getPlayfieldScreenWidth(), getPlayfieldScreenHeight(), bmpPlayfieldBackground.getConfig() );
             Canvas canvas = new Canvas( bmpPlayfieldScreen[1 - activePlayfieldScreen] );
-            canvas.drawBitmap(bmpPlayfieldBackground, null, new Rect(0,0, getPlayfieldScreenWidth(), getPlayfieldScreenHeight() ), null);
+            canvas.drawBitmap(bmpPlayfieldScreen[activePlayfieldScreen], null, new Rect(0,0, getPlayfieldScreenWidth(), getPlayfieldScreenHeight() ), null);
+
 			animationRunning = false;
 
 			int tileOffsetX = (int)(sizeX * smoothAnimationStep);
@@ -197,8 +201,14 @@ public class GameView extends SurfaceView implements Callback {
 						Point moveTo = playfield.GetMovemap(i, j);
 
 						if (moveTo.x > i) {
-							// move tile horizontally
-							canvas.drawBitmap(bmpTiles[playfield.Get(i, j)], null, new Rect( i * sizeX + tileOffsetX, j * sizeY, (i + 1 ) * sizeX - 1 + tileOffsetX, (j + 1) * sizeY - 1), null);
+						    // move tile horizontally
+                            // erase source area only if no left neighbour
+                            if( playfield.Get(i - 1, j) == -1 ) {
+                                Bitmap background = Bitmap.createBitmap(bmpPlayfieldBackground, i * sizeX, j * sizeY, sizeX, sizeY);
+                                canvas.drawBitmap(background, null, new Rect(i * sizeX, j * sizeY, (i + 1) * sizeX, (j + 1) * sizeY), null);
+                            }// if
+
+							canvas.drawBitmap(bmpTiles[playfield.Get(i, j)], null, new Rect( i * sizeX + tileOffsetX, j * sizeY, (i + 1) * sizeX + tileOffsetX, (j + 1) * sizeY), null);
 
 							if( smoothAnimationStep >= 1.0f) {
 								playfield.SetMovemap(i + 1, j, moveTo);
@@ -210,7 +220,13 @@ public class GameView extends SurfaceView implements Callback {
 						}// if
 						else if (moveTo.y > j) {
 							// move tile vertically
-							canvas.drawBitmap(bmpTiles[playfield.Get(i, j)], null, new Rect(i * sizeX, j * sizeY + tileOffsetY, (i + 1) * sizeX - 1, (j + 1) * sizeY - 1 + tileOffsetY), null);
+                            // erase source area only if no upper neighbour
+                            if(playfield.Get(i, j - 1) == -1 ) {
+                                Bitmap background = Bitmap.createBitmap( bmpPlayfieldBackground, i * sizeX, j * sizeY, sizeX, sizeY );
+                                canvas.drawBitmap(background, null, new Rect(i * sizeX, j * sizeY, (i + 1) * sizeX, (j + 1) * sizeY), null);
+                            }// if
+
+							canvas.drawBitmap(bmpTiles[playfield.Get(i, j)], null, new Rect(i * sizeX, j * sizeY + tileOffsetY, (i + 1) * sizeX, (j + 1) * sizeY + tileOffsetY), null);
 
 							if( smoothAnimationStep >= 1.0f) {
 								playfield.SetMovemap(i, j + 1, moveTo);
@@ -219,12 +235,16 @@ public class GameView extends SurfaceView implements Callback {
 								playfield.Set(i, j, -1);
 							}// if
 							animationRunning = true;
-
 						}// if
-						else {
-							canvas.drawBitmap(bmpTiles[playfield.Get(i, j)], null, new Rect(i * sizeX, j * sizeY, (i + 1) * sizeX - 1, (j + 1) * sizeY - 1), null);
-						}// else
 					}// if
+                    else {
+                        Point moveTo = playfield.GetMovemap(i, j);
+                        // erase tile
+                        if( moveTo.x == -1 && moveTo.y == -1) {
+                            Bitmap background = Bitmap.createBitmap( bmpPlayfieldBackground, i * sizeX, j * sizeY, sizeX, sizeY );
+                            canvas.drawBitmap(background, null, new Rect(i * sizeX, j * sizeY, (i + 1) * sizeX, (j + 1) * sizeY), null);
+                        }// if
+                    }// else
 				}// for i
 			}// for j
             activePlayfieldScreen = 1 - activePlayfieldScreen;
@@ -234,16 +254,11 @@ public class GameView extends SurfaceView implements Callback {
 				if( smoothAnimationStep > 1f ){
 					smoothAnimationStep = SMOOTH_ANIMATION_STEP_SIZE;
 				}// if
-
-				try {
-					TimeUnit.MILLISECONDS.sleep(10);
-				} // try
-				catch (InterruptedException exeption) {
-					// TODO anything to do here?
-				}// catch
 			}// if
 
+            while( waitForDraw );
 		} while( animationRunning );
+
 	}// renderPlayfield
 
 
