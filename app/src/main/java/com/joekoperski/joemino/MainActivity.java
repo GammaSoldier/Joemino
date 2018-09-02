@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
         theDisplay.getSize(displaySize);
         // TODO replace constants by variables
         float ratioX = 336f / 1080f;
-        float ratioY = 189f / 1920f;
+        float ratioY = 264f / 1920f;
         Point buttonSize = new Point( (int) ((float) (displaySize.x) * ratioX), (int) ((float) (displaySize.y) * ratioY));
         Point position;
 
