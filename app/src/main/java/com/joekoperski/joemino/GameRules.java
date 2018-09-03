@@ -109,7 +109,7 @@ public class GameRules {
                     retVal = CONTINUE;
                 }// else
                 moveState = STATE_DELETE;
-
+                break;
             default:    // illegal state
 
         }// switch
