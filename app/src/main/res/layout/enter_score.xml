@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:drawable/alert_light_frame"
+    android:background="@drawable/dialog_background"
     android:gravity="center_vertical"
     android:orientation="vertical">
 
@@ -12,6 +13,7 @@
         android:layout_height="49dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/str_grats"
+        android:textColor="@android:color/white"
         android:textSize="18sp" />
 
     <TextView
@@ -20,6 +22,7 @@
         android:layout_height="57dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="TextView"
+        android:textColor="@android:color/white"
         android:textSize="18sp" />
 
     <EditText
@@ -28,11 +31,13 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="" />
+        android:text=""
+        android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/buttonOK"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
         android:text="OK" />
 </LinearLayout>

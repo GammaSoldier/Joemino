@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#87eefe"
+    android:background="@drawable/dialog_background"
     android:gravity="center_vertical"
     android:orientation="vertical">
 
@@ -17,6 +17,7 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:text="1."
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -24,6 +25,7 @@
             android:layout_width="209dp"
             android:layout_height="match_parent"
             android:text="Joe"
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -32,6 +34,7 @@
             android:layout_height="match_parent"
             android:gravity="right"
             android:text="20000"
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
 
     </TableRow>
@@ -46,6 +49,7 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:text="2."
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -53,6 +57,7 @@
             android:layout_width="209dp"
             android:layout_height="match_parent"
             android:text="Anne"
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -61,6 +66,7 @@
             android:layout_height="match_parent"
             android:gravity="right"
             android:text="19000"
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
     </TableRow>
 
@@ -74,6 +80,7 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:text="3."
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -81,6 +88,7 @@
             android:layout_width="209dp"
             android:layout_height="match_parent"
             android:text="Anne"
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -89,6 +97,7 @@
             android:layout_height="match_parent"
             android:gravity="right"
             android:text="19000"
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
     </TableRow>
 
@@ -102,6 +111,7 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:text="4."
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -109,6 +119,7 @@
             android:layout_width="209dp"
             android:layout_height="match_parent"
             android:text="Anne"
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -117,6 +128,7 @@
             android:layout_height="match_parent"
             android:gravity="right"
             android:text="19000"
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
     </TableRow>
 
@@ -130,6 +142,7 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:text="5."
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -137,6 +150,7 @@
             android:layout_width="209dp"
             android:layout_height="match_parent"
             android:text="Anne"
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -145,6 +159,7 @@
             android:layout_height="match_parent"
             android:gravity="right"
             android:text="19000"
+            android:textColor="@android:color/white"
             android:textSize="18sp" />
     </TableRow>
 
@@ -158,6 +173,7 @@
             android:id="@+id/buttonDel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
             android:text="Delete Scores" />
 
     </TableRow>
@@ -171,6 +187,7 @@
             android:id="@+id/buttonOK"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
             android:text="OK" />
     </TableRow>
 

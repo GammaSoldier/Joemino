@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_orange_light"
+    android:background="@drawable/dialog_background"
     android:gravity="center_vertical"
     android:orientation="vertical">
 
@@ -12,6 +12,7 @@
         android:layout_height="57dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/str_gameover"
+        android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -19,5 +20,6 @@
         android:id="@+id/buttonOK"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="OK" />
+        android:text="OK"
+        android:textColor="@android:color/white" />
 </LinearLayout>

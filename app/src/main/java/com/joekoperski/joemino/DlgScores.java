@@ -3,6 +3,7 @@ package com.joekoperski.joemino;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -22,8 +23,10 @@ public class DlgScores extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle( R.string.str_highscores );
+//        setTitle( R.string.str_highscores );
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.score_board);
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.score_board_title);
         initList();
 
         //On Click listeners for the buttons present in the Dialog

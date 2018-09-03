@@ -65,7 +65,7 @@ public class GameView extends SurfaceView implements Callback {
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		// position playfield at center of screen
-		posPlayfieldScreen = new Point( 0, (getHeight() - getWidth()) / 2 );
+		posPlayfieldScreen = new Point( (getWidth() - getPlayfieldScreenWidth()) / 2, (getHeight() - getPlayfieldScreenHeight()) / 2 );
 
 		// Prapare graphics
 		Bitmap bmpTemp;
@@ -89,8 +89,8 @@ public class GameView extends SurfaceView implements Callback {
 		bmpTiles[4] = BitmapFactory.decodeResource(getResources(), R.drawable.tile5);
 */
 
-		// REWORK: 03.09.2018 set dimensions to 3/5 of screen if 16:9, otherwise ... still don't know
-		bmpPlayfieldScreen[ activePlayfieldScreen ] = Bitmap.createBitmap( getWidth(), getWidth(), bmpPlayfieldBackground.getConfig() );
+		bmpPlayfieldScreen[ activePlayfieldScreen ] = Bitmap.createBitmap( getPlayfieldScreenWidth(), getPlayfieldScreenHeight(), bmpPlayfieldBackground.getConfig() );
+
 		gfxLoopThread = new GfxLoopThread(this);
 		gfxLoopThread.setRunning(true);
 		if( !gfxLoopThread.isAlive() ) {
@@ -134,7 +134,6 @@ public class GameView extends SurfaceView implements Callback {
 		if( canvas != null ) {
             super.draw(canvas);
             canvas.drawBitmap( bmpBackground, 0, 0, null );
-			// REWORK: 03.09.2018   set dimensions to 3/5 of screen
 			canvas.drawBitmap( bmpPlayfieldScreen[activePlayfieldScreen], posPlayfieldScreen.x, posPlayfieldScreen.y, null );
 		}// if
 	}// draw
@@ -274,14 +273,19 @@ public class GameView extends SurfaceView implements Callback {
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
     private int getPlayfieldScreenWidth() {
-// REWORK: 03.09.2018 set dimensions to 3/5 of screen if 16:9, otherwise ... still don't know
-		return (getWidth() - 2 * posPlayfieldScreen.x);
+		int height =(int)(getHeight() * 4 / 7);
+        if( getWidth() < height ) {
+            return getWidth();
+        }// if
+        else {
+            return height;
+        }// else
     }// getPlayfieldScreenWidth
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     private int getPlayfieldScreenHeight() {
-// REWORK: 03.09.2018 set dimensions to 3/5 of screen if 16:9, otherwise ... still don't know
-		return (getHeight() - 2 * posPlayfieldScreen.y);
+        // make size a square
+		return getPlayfieldScreenWidth();
     }// getPlayfieldScreenHeight
 }// BitmapView
