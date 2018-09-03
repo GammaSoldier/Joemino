@@ -1,3 +1,4 @@
+// TODO make playfield screen 3/5 of display height
 // TODO display scores
 // TODO use custom font for dialogs (https://stackoverflow.com/questions/27588965/how-to-use-custom-font-in-a-project-written-in-android-studio)
 // TODO explode tiles

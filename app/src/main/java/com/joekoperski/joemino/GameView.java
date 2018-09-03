@@ -1,3 +1,4 @@
+
 package com.joekoperski.joemino;
 
 import android.content.Context;
@@ -88,6 +89,7 @@ public class GameView extends SurfaceView implements Callback {
 		bmpTiles[4] = BitmapFactory.decodeResource(getResources(), R.drawable.tile5);
 */
 
+		// REWORK: 03.09.2018 set dimensions to 3/5 of screen if 16:9, otherwise ... still don't know
 		bmpPlayfieldScreen[ activePlayfieldScreen ] = Bitmap.createBitmap( getWidth(), getWidth(), bmpPlayfieldBackground.getConfig() );
 		gfxLoopThread = new GfxLoopThread(this);
 		gfxLoopThread.setRunning(true);
@@ -132,7 +134,8 @@ public class GameView extends SurfaceView implements Callback {
 		if( canvas != null ) {
             super.draw(canvas);
             canvas.drawBitmap( bmpBackground, 0, 0, null );
-            canvas.drawBitmap( bmpPlayfieldScreen[activePlayfieldScreen], posPlayfieldScreen.x, posPlayfieldScreen.y, null );
+			// REWORK: 03.09.2018   set dimensions to 3/5 of screen
+			canvas.drawBitmap( bmpPlayfieldScreen[activePlayfieldScreen], posPlayfieldScreen.x, posPlayfieldScreen.y, null );
 		}// if
 	}// draw
 
@@ -271,12 +274,14 @@ public class GameView extends SurfaceView implements Callback {
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
     private int getPlayfieldScreenWidth() {
-        return (getWidth() - 2 * posPlayfieldScreen.x);
+// REWORK: 03.09.2018 set dimensions to 3/5 of screen if 16:9, otherwise ... still don't know
+		return (getWidth() - 2 * posPlayfieldScreen.x);
     }// getPlayfieldScreenWidth
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     private int getPlayfieldScreenHeight() {
-        return (getHeight() - 2 * posPlayfieldScreen.y);
+// REWORK: 03.09.2018 set dimensions to 3/5 of screen if 16:9, otherwise ... still don't know
+		return (getHeight() - 2 * posPlayfieldScreen.y);
     }// getPlayfieldScreenHeight
 }// BitmapView
