@@ -7,19 +7,23 @@ package com.joekoperski.joemino;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.TextViewCompat;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
 public class MainActivity extends Activity {
@@ -32,17 +36,25 @@ public class MainActivity extends Activity {
     private Playfield playfield;
     private GameRules gameRules;
 
+    TextView scoreView;
+
     static SoundPool soundPool;
     static int[] sm;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        FrameLayout gameLayout;// Sort of "holder" for everything we are placing
-        RelativeLayout gameButtons;//Holder for the buttons
+        FrameLayout gameLayout;         // Sort of "holder" for everything we are placing
+        RelativeLayout layoutGameButtons;     //Holder for the buttons
+        RelativeLayout layoutScoreView;
+
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        Display theDisplay = getWindowManager().getDefaultDisplay();
+        Point displaySize = new Point();
+        theDisplay.getSize(displaySize);
 
         playfield = new Playfield();
         gameRules = new GameRules( playfield );
@@ -51,14 +63,31 @@ public class MainActivity extends Activity {
         gameView.setPlayfieldExtents( playfield.GetWidth(), playfield.GetHeight() );
 
         gameLayout = new FrameLayout(this);
-        gameButtons = new RelativeLayout(this);
 
-        Display theDisplay = getWindowManager().getDefaultDisplay();
-        Point displaySize = new Point();
-        theDisplay.getSize(displaySize);
+        // score
+        layoutScoreView = new RelativeLayout(this);
+        scoreView = new TextView(this);
+        scoreView.setTextColor( Color.WHITE );
+        scoreView.setText( "Score" );
+        scoreView.setTextSize( 24 );
+        scoreView.setGravity( Gravity.CENTER_HORIZONTAL );
+        scoreView.setBackgroundColor( Color.TRANSPARENT );
+//        scoreView.setBackgroundResource( R.drawable.dialog_background );
+        scoreView.setPadding(10, 0, 10, 0);
+        scoreView.setWidth(displaySize.x / 4);
+        scoreView.setX( (3 * displaySize.x / 4) / 2 );
+        scoreView.setY( displaySize.y / 7 );
+
+        layoutScoreView.addView(scoreView);
+
+
+
+        // Buttons
+        layoutGameButtons = new RelativeLayout(this);
+
         // TODO replace constants by variables
-        float ratioX = 336f / 1080f;
-        float ratioY = 264f / 1920f;
+        float ratioX = 336f / displaySize.x;
+        float ratioY = 264f / displaySize.y;
         Point buttonSize = new Point( (int) ((float) (displaySize.x) * ratioX), (int) ((float) (displaySize.y) * ratioY));
         Point position;
 
@@ -91,12 +120,14 @@ public class MainActivity extends Activity {
             }
         } );
 
-        gameButtons.addView(  buttonNew );
-        gameButtons.addView(  buttonScore );
-        gameButtons.addView(  buttonExit );
+        layoutGameButtons.addView(  buttonNew );
+        layoutGameButtons.addView(  buttonScore );
+        layoutGameButtons.addView(  buttonExit );
 
         gameLayout.addView(gameView);
-        gameLayout.addView(gameButtons);
+        gameLayout.addView(layoutGameButtons);
+        gameLayout.addView(layoutScoreView);
+
         setContentView(gameLayout);
 
         setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -104,6 +135,7 @@ public class MainActivity extends Activity {
 
 
 
+        // Load sounds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             soundPool = new SoundPool.Builder()
                     .setMaxStreams(1)
@@ -179,6 +211,7 @@ public class MainActivity extends Activity {
         }// while
 
         gameView.renderPlayfield( playfield );
+        scoreView.setText( String.format( "%1$d", gameRules.getScore()) );
 
         switch (moveResult) {
             case GameRules.CONTINUE:
@@ -213,6 +246,8 @@ public class MainActivity extends Activity {
     public void GUINotification( Boolean ready ) {
         if( ready ) {
             gameView.renderPlayfieldFirstTime( playfield );
+            scoreView.setText( String.format( "%1$d", gameRules.getScore()) );
+
         }// if
     }// GUINotification
 
@@ -246,6 +281,8 @@ public class MainActivity extends Activity {
         playfield = new Playfield();
         gameRules = new GameRules( playfield );
         gameView.renderPlayfieldFirstTime( playfield );
+        scoreView.setText( String.format( "%1$d", gameRules.getScore()) );
+
     }// StartGame
 
 
