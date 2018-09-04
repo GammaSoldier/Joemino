@@ -126,7 +126,8 @@ public class GameView extends SurfaceView implements Callback {
 				retry=false;
 			}// try
 			catch(InterruptedException e) {
-			}
+                Log.d( "GameView", "surfaceDestroyed InterruptedException");
+			}// catch
 		}// while
 	}// surfaceDestroyed
 
@@ -267,7 +268,7 @@ public class GameView extends SurfaceView implements Callback {
                     TimeUnit.MILLISECONDS.sleep(1);
                 } // try
                 catch (InterruptedException exeption) {
-                    // TODO anything to do here?
+                    Log.d( "GameView", "renderPlayfield InterruptedException");
                 }// catch
             }// while
 		} while( animationRunning );
@@ -278,7 +279,7 @@ public class GameView extends SurfaceView implements Callback {
 	////////////////////////////////////////////////////////////////////////////////////////////////
     private int getPlayfieldScreenWidth() {
 		int retVal;
-		int height =(int)(getHeight() * 4 / 7);
+		int height =(int)(getHeight() * 4.0 / 7);
         if( getWidth() < height ) {
             retVal =  getWidth();
         }// if
@@ -286,7 +287,7 @@ public class GameView extends SurfaceView implements Callback {
             retVal =  height;
         }// else
 		// make size a multiple of tile widths
-		retVal = (int)(retVal / mPlayfieldExtentX) * mPlayfieldExtentX;
+		retVal = (retVal / mPlayfieldExtentX) * mPlayfieldExtentX;
 		return retVal;
     }// getPlayfieldScreenWidth
 
