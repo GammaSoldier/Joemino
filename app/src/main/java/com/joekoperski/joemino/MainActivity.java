@@ -13,7 +13,6 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.widget.TextViewCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -22,8 +21,15 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import static android.util.TypedValue.COMPLEX_UNIT_DIP;
+import static android.util.TypedValue.COMPLEX_UNIT_FRACTION;
+import static android.util.TypedValue.COMPLEX_UNIT_FRACTION_PARENT;
+import static android.util.TypedValue.COMPLEX_UNIT_MM;
+import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
 
 public class MainActivity extends Activity {
@@ -36,7 +42,8 @@ public class MainActivity extends Activity {
     private Playfield playfield;
     private GameRules gameRules;
 
-    TextView scoreView;
+    private BitmapTextView scoreView;
+    private BitmapTextView scoreTextView;
 
     static SoundPool soundPool;
     static int[] sm;
@@ -66,19 +73,25 @@ public class MainActivity extends Activity {
 
         // score
         layoutScoreView = new RelativeLayout(this);
-        scoreView = new TextView(this);
+
+        scoreView = new BitmapTextView(this);
+        scoreView.init(displaySize.x / 5, displaySize.y / 15, R.drawable.score_display_right);
         scoreView.setTextColor( Color.WHITE );
         scoreView.setText( "Score" );
-        scoreView.setTextSize( 24 );
-        scoreView.setGravity( Gravity.CENTER_HORIZONTAL );
-        scoreView.setBackgroundColor( Color.TRANSPARENT );
-//        scoreView.setBackgroundResource( R.drawable.dialog_background );
-        scoreView.setPadding(10, 0, 10, 0);
-        scoreView.setWidth(displaySize.x / 4);
-        scoreView.setX( (3 * displaySize.x / 4) / 2 );
-        scoreView.setY( displaySize.y / 7 );
+        scoreView.setTextSize( COMPLEX_UNIT_FRACTION, 76 );
+        scoreView.setX( displaySize.x / 2 );
+        scoreView.setY( displaySize.y / 8 );
+
+        scoreTextView = new BitmapTextView(this);
+        scoreTextView.init(displaySize.x / 5, displaySize.y / 15, R.drawable.score_display_left);
+        scoreTextView.setTextColor( Color.WHITE );
+        scoreTextView.setText( "Tiles:" );
+        scoreTextView.setTextSize( COMPLEX_UNIT_FRACTION, 76 );
+        scoreTextView.setX(  displaySize.x / 2 - displaySize.x / 5 );
+        scoreTextView.setY( displaySize.y / 8 );
 
         layoutScoreView.addView(scoreView);
+        layoutScoreView.addView(scoreTextView);
 
 
 
