@@ -31,6 +31,7 @@ public class GameView extends SurfaceView implements Callback {
 
 	private int touchX, touchY;
 	private int mPlayfieldExtentX, mPlayfieldExtentY;
+	private Point mPlayfieldScreen;
 
 	private GfxLoopThread gfxLoopThread;
     private Boolean waitForDraw;
@@ -45,7 +46,7 @@ public class GameView extends SurfaceView implements Callback {
 
 		activePlayfieldScreen = 0;
 		bmpPlayfieldScreen = new Bitmap[2];
-
+		mPlayfieldScreen = new Point(0,0);
 		surfaceHolder = getHolder();
 		surfaceHolder.addCallback(this);
 
@@ -58,6 +59,7 @@ public class GameView extends SurfaceView implements Callback {
 	public void setPlayfieldExtents(int x, int y ) {
 		mPlayfieldExtentX = x;
 		mPlayfieldExtentY = y;
+
 	}// setPlayfieldExtents
 
 
@@ -65,14 +67,16 @@ public class GameView extends SurfaceView implements Callback {
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		// position playfield at center of screen
-		posPlayfieldScreen = new Point( (getWidth() - getPlayfieldScreenWidth()) / 2, (getHeight() - getPlayfieldScreenHeight()) / 2 );
+		mPlayfieldScreen.x = getPlayfieldScreenWidth();
+		mPlayfieldScreen.y = getPlayfieldScreenHeight();
+		posPlayfieldScreen = new Point( (getWidth() - mPlayfieldScreen.x) / 2, (getHeight() - mPlayfieldScreen.y) / 2 );
 
 		// Prapare graphics
 		Bitmap bmpTemp;
 		bmpTemp = BitmapFactory.decodeResource(getResources(), R.drawable.background);
 		bmpBackground = Bitmap.createScaledBitmap( bmpTemp, getWidth(), getHeight(), true );
 		bmpTemp = BitmapFactory.decodeResource(getResources(), R.drawable.playfield);
-		bmpPlayfieldBackground = Bitmap.createScaledBitmap( bmpTemp, getPlayfieldScreenWidth(), getPlayfieldScreenHeight(), true );
+		bmpPlayfieldBackground = Bitmap.createScaledBitmap( bmpTemp, mPlayfieldScreen.x, mPlayfieldScreen.y, true );
 
 		bmpTiles = new Bitmap[5];
 		bmpTiles[0] = BitmapFactory.decodeResource(getResources(), R.drawable.glass1);
@@ -89,7 +93,7 @@ public class GameView extends SurfaceView implements Callback {
 		bmpTiles[4] = BitmapFactory.decodeResource(getResources(), R.drawable.tile5);
 */
 
-		bmpPlayfieldScreen[ activePlayfieldScreen ] = Bitmap.createBitmap( getPlayfieldScreenWidth(), getPlayfieldScreenHeight(), bmpPlayfieldBackground.getConfig() );
+		bmpPlayfieldScreen[ activePlayfieldScreen ] = Bitmap.createBitmap( mPlayfieldScreen.x, mPlayfieldScreen.y, bmpPlayfieldBackground.getConfig() );
 
 		gfxLoopThread = new GfxLoopThread(this);
 		gfxLoopThread.setRunning(true);
@@ -146,8 +150,8 @@ public class GameView extends SurfaceView implements Callback {
 			touchX = (int) event.getX();
 			touchY = (int) event.getY();
 
-			int x = (touchX -  posPlayfieldScreen.x) / ( getPlayfieldScreenWidth() / mPlayfieldExtentX) ;
-			int y = (touchY -  posPlayfieldScreen.y) / ( getPlayfieldScreenHeight() / mPlayfieldExtentY) ;
+			int x = (touchX -  posPlayfieldScreen.x) / ( mPlayfieldScreen.x / mPlayfieldExtentX) ;
+			int y = (touchY -  posPlayfieldScreen.y) / ( mPlayfieldScreen.y / mPlayfieldExtentY) ;
 
 			mContext.TileTouched( x, y );
 		}// if
@@ -157,12 +161,12 @@ public class GameView extends SurfaceView implements Callback {
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	public void renderPlayfieldFirstTime(Playfield playfield ) {
-		int sizeX = getPlayfieldScreenWidth() / mPlayfieldExtentX;
-		int sizeY = getPlayfieldScreenHeight() / mPlayfieldExtentY;
+		int sizeX = mPlayfieldScreen.x / mPlayfieldExtentX;
+		int sizeY = mPlayfieldScreen.y / mPlayfieldExtentY;
 
-		bmpPlayfieldScreen[1 - activePlayfieldScreen] = Bitmap.createBitmap( getPlayfieldScreenWidth(), getPlayfieldScreenHeight(), bmpPlayfieldBackground.getConfig() );
+		bmpPlayfieldScreen[1 - activePlayfieldScreen] = Bitmap.createBitmap( mPlayfieldScreen.x, mPlayfieldScreen.y, bmpPlayfieldBackground.getConfig() );
 		Canvas canvas = new Canvas( bmpPlayfieldScreen[1 - activePlayfieldScreen] );
-		canvas.drawBitmap(bmpPlayfieldBackground, null, new Rect(0,0, getPlayfieldScreenWidth(), getPlayfieldScreenHeight() ), null);
+		canvas.drawBitmap(bmpPlayfieldBackground, null, new Rect(0,0, mPlayfieldScreen.x, mPlayfieldScreen.y ), null);
 
 		for( int j = 0; j < mPlayfieldExtentY; j++ ) {
 			for (int i = 0; i < mPlayfieldExtentX; i++) {
@@ -178,8 +182,8 @@ public class GameView extends SurfaceView implements Callback {
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	public void renderPlayfield(Playfield playfield ) {
-		int sizeX = getPlayfieldScreenWidth() / mPlayfieldExtentX;
-		int sizeY = getPlayfieldScreenHeight() / mPlayfieldExtentY;
+		int sizeX = mPlayfieldScreen.x / mPlayfieldExtentX;
+		int sizeY = mPlayfieldScreen.y / mPlayfieldExtentY;
 
 		//render tiles
 		Boolean animationRunning = false;
@@ -188,9 +192,9 @@ public class GameView extends SurfaceView implements Callback {
 		do{
             waitForDraw = true;
 		    // render background
-            bmpPlayfieldScreen[1 - activePlayfieldScreen] = Bitmap.createBitmap( getPlayfieldScreenWidth(), getPlayfieldScreenHeight(), bmpPlayfieldBackground.getConfig() );
+            bmpPlayfieldScreen[1 - activePlayfieldScreen] = Bitmap.createBitmap( mPlayfieldScreen.x, mPlayfieldScreen.y, bmpPlayfieldBackground.getConfig() );
             Canvas canvas = new Canvas( bmpPlayfieldScreen[1 - activePlayfieldScreen] );
-            canvas.drawBitmap(bmpPlayfieldScreen[activePlayfieldScreen], null, new Rect(0,0, getPlayfieldScreenWidth(), getPlayfieldScreenHeight() ), null);
+            canvas.drawBitmap(bmpPlayfieldScreen[activePlayfieldScreen], null, new Rect(0,0, mPlayfieldScreen.x, mPlayfieldScreen.y ), null);
 
 			animationRunning = false;
 
@@ -265,7 +269,7 @@ public class GameView extends SurfaceView implements Callback {
                 catch (InterruptedException exeption) {
                     // TODO anything to do here?
                 }// catch
-            };
+            }// while
 		} while( animationRunning );
 
 	}// renderPlayfield
@@ -273,13 +277,17 @@ public class GameView extends SurfaceView implements Callback {
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
     private int getPlayfieldScreenWidth() {
+		int retVal;
 		int height =(int)(getHeight() * 4 / 7);
         if( getWidth() < height ) {
-            return getWidth();
+            retVal =  getWidth();
         }// if
         else {
-            return height;
+            retVal =  height;
         }// else
+		// make size a multiple of tile widths
+		retVal = (int)(retVal / mPlayfieldExtentX) * mPlayfieldExtentX;
+		return retVal;
     }// getPlayfieldScreenWidth
 
 
