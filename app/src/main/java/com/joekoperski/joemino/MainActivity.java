@@ -14,21 +14,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import static android.util.TypedValue.COMPLEX_UNIT_DIP;
 import static android.util.TypedValue.COMPLEX_UNIT_FRACTION;
-import static android.util.TypedValue.COMPLEX_UNIT_FRACTION_PARENT;
-import static android.util.TypedValue.COMPLEX_UNIT_MM;
-import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
 
 public class MainActivity extends Activity {
@@ -216,7 +209,7 @@ public class MainActivity extends Activity {
             PlaySound( SOUND_CLICK );
         }
 
-        while(  moveResult == GameRules.CONTINUE_MOVE ) {
+        while(  moveResult == GameRules.CONTINUE_MOVE) {
             // aninmate
             gameView.renderPlayfield( playfield );
             moveResult = gameRules.makeMove( playfield, x, y );

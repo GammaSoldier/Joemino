@@ -19,7 +19,8 @@ import java.util.concurrent.TimeUnit;
 public class GameView extends SurfaceView implements Callback {
 
 	private final static float SMOOTH_ANIMATION_STEP_SIZE = 0.5f;
-	private final static float SMOOTH_DELETION_STEP_SIZE = 0.1f;
+    // TODO: 06.09.2018 can't  add 0.1
+    private final static float SMOOTH_DELETION_STEP_SIZE = 0.2f;
 
 	private SurfaceHolder surfaceHolder;
 	private Bitmap bmpTiles[];
@@ -187,13 +188,13 @@ public class GameView extends SurfaceView implements Callback {
 		int sizeX = mPlayfieldScreen.x / mPlayfieldExtentX;
 		int sizeY = mPlayfieldScreen.y / mPlayfieldExtentY;
 
-		//render tiles
 		Boolean animationRunning;
 		Boolean deletionRunning;
 
 		float smoothAnimationStep = SMOOTH_ANIMATION_STEP_SIZE;
 		float smoothDeletionStep = SMOOTH_DELETION_STEP_SIZE;
 
+		//render tiles
 		do{
             waitForDraw = true;
 		    // render background
@@ -204,25 +205,22 @@ public class GameView extends SurfaceView implements Callback {
 			animationRunning = false;
 			deletionRunning = false;
 
-			for (int j = mPlayfieldExtentY - 1; j >= 0; j--) {
-				for (int i = mPlayfieldExtentX - 1; i >= 0; i--) {
-					if (playfield.Get(i, j) >= 0) {
-						Point moveTo = playfield.GetMovemap(i, j);
-
-						if (moveTo.x > i) {
-						    // move tile horizontally
- 							animationRunning = animateTileMoveHorizontal( canvas, playfield, i, j, sizeX, sizeY, smoothAnimationStep );
-						}// if
-						else if (moveTo.y > j) {
-							// move tile vertically
-							animationRunning = animateTileMoveVertical( canvas, playfield, i, j, sizeX, sizeY, smoothAnimationStep );
-						}// if
-					}// if
-                    else {
-						animateTileErase( canvas, playfield, i, j, sizeX, sizeY ,smoothDeletionStep);
-                    }// else
-				}// for i
-			}// for j
+            for (int j = mPlayfieldExtentY - 1; j >= 0; j--) {
+                for (int i = mPlayfieldExtentX - 1; i >= 0; i--) {
+                    Point moveTo = playfield.GetMovemap(i, j);
+                    if (moveTo.x == GameRules.MOVE_DELETE && moveTo.y == GameRules.MOVE_DELETE) {
+                        deletionRunning = animateTileErase(canvas, playfield, i, j, sizeX, sizeY, smoothDeletionStep);
+//                        deletionRunning = true;
+                    } else if (moveTo.x > i) {
+                        // move tile horizontally
+                        animationRunning = animateTileMoveHorizontal(canvas, playfield, i, j, sizeX, sizeY, smoothAnimationStep);
+                    }// if
+                    else if (moveTo.y > j) {
+                        // move tile vertically
+                        animationRunning = animateTileMoveVertical(canvas, playfield, i, j, sizeX, sizeY, smoothAnimationStep);
+                    }// if
+                }// for i
+            }// for j
             activePlayfieldScreen = 1 - activePlayfieldScreen;
 
 			if( animationRunning ){
@@ -232,45 +230,48 @@ public class GameView extends SurfaceView implements Callback {
 				}// if
 			}// if
 
-/*
 			if( deletionRunning ){
 				smoothDeletionStep += SMOOTH_DELETION_STEP_SIZE;
 				if( smoothDeletionStep > 1f ){
 					smoothDeletionStep = SMOOTH_DELETION_STEP_SIZE;
 				}// if
 			}// if
-*/
 
 			while( waitForDraw ){
-                try {
-                    TimeUnit.MILLISECONDS.sleep(1);
-                } // try
-                catch (InterruptedException exeption) {
-                    Log.d( "GameView", "renderPlayfield InterruptedException");
-                }// catch
-            }// while
-		} while( animationRunning );
+				try {
+					TimeUnit.MILLISECONDS.sleep(1);
+				} // try
+				catch (InterruptedException exeption) {
+					Log.d( "GameView", "renderPlayfield InterruptedException");
+				}// catch
+			}// while
+
+		} while( animationRunning || deletionRunning );
 
 	}// renderPlayfield
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	private Boolean animateTileErase( Canvas canvas, Playfield playfield, int posX, int posY, int tileSizeX, int tileSizeY, float deletionStep ) {
-		Point moveTo = playfield.GetMovemap(posX, posY);
-		// erase tile
-		if( moveTo.x == -1 && moveTo.y == -1) {
-			Bitmap background = Bitmap.createBitmap( bmpPlayfieldBackground, posX * tileSizeX, posY * tileSizeY, tileSizeX, tileSizeY );
-			canvas.drawBitmap(background, null, new Rect(posX * tileSizeX, posY * tileSizeY, (posX + 1) * tileSizeX, (posY + 1) * tileSizeY), null);
-/*
-			canvas.drawBitmap(bmpTiles[playfield.Get(posX, posY)], null,
-					new Rect(posX * tileSizeX + (int)(deletionStep * tileSizeX),
-							(posY * tileSizeY) + (int)(deletionStep * tileSizeY),
-							(posX + 1) * tileSizeX -  (int)(deletionStep * tileSizeX),
-							(posY + 1) * tileSizeY - (int)(deletionStep * tileSizeY)), null);
-*/
-		}// if
-		return true;
-	}
+    private Boolean animateTileErase(Canvas canvas, Playfield playfield, int posX, int posY, int tileSizeX, int tileSizeY, float deletionStep) {
+        Point moveTo = playfield.GetMovemap(posX, posY);
+        // erase tile
+        Bitmap background = Bitmap.createBitmap(bmpPlayfieldBackground, posX * tileSizeX, posY * tileSizeY, tileSizeX, tileSizeY);
+        canvas.drawBitmap(background, null, new Rect(posX * tileSizeX, posY * tileSizeY, (posX + 1) * tileSizeX, (posY + 1) * tileSizeY), null);
+
+        Rect rect = new Rect(posX * tileSizeX + (int) (deletionStep * tileSizeX),
+                (posY * tileSizeY) + (int) (deletionStep * tileSizeY),
+                (posX + 1) * tileSizeX - (int) (deletionStep * tileSizeX),
+                (posY + 1) * tileSizeY - (int) (deletionStep * tileSizeY));
+
+        canvas.drawBitmap(bmpTiles[playfield.Get(posX,posY)], null, rect, null);
+        if (deletionStep >= 1.0f) {
+            playfield.SetMovemap(posX, posY, new Point(posX, posY));
+            playfield.Set(posX, posY, -1);
+            return false;
+        }// if
+
+        return true;
+    }
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

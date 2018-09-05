@@ -15,6 +15,9 @@ public class GameRules {
     private static final int STATE_DROP = 1;
     private static final int STATE_COMPRESS = 2;
     private static final int STATE_FINISHED = 3;
+
+    public static final int MOVE_DELETE = -255;
+
     private int mScore;
     private int moveState;
 
@@ -62,7 +65,7 @@ public class GameRules {
     public int makeMove( Playfield playfield, int x, int y ) {
         int actualTile;
         Point keepMoveIndex = new Point();
-        int retVal = 1;
+        int retVal = CONTINUE;
 
         // init movemap
         initMoveMap( playfield );
@@ -126,7 +129,7 @@ public class GameRules {
 
         playfield.Set( x, y, -1 );
         playfield.SetDestinationMap( x, y, -1 );
-        playfield.SetMovemap( x, y, new Point(-1, -1) );
+        playfield.SetMovemap( x, y, new Point(MOVE_DELETE, MOVE_DELETE) );
 
         // check upper tile
         if( y > 0 )	 {
@@ -155,7 +158,7 @@ public class GameRules {
                 numTiles += deleteNeighbours( playfield, x+1, y );
             }// if
         }// if
-
+        playfield.Set( x, y, actualTile );
         numTiles++;
         return numTiles;
     }// deleteNeighbours
