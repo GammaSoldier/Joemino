@@ -95,8 +95,6 @@ public class MainActivity extends Activity {
         layoutScoreView.addView(scoreView);
         layoutScoreView.addView(scoreTextView);
 
-
-
         // Buttons
         layoutGameButtons = new RelativeLayout(this);
 
@@ -149,9 +147,7 @@ public class MainActivity extends Activity {
         setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().getDecorView().setBackgroundColor( 0x000000 );
 
-
-
-        // Load sounds
+       // Load sounds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             soundPool = new SoundPool.Builder()
                     .setMaxStreams(1)
