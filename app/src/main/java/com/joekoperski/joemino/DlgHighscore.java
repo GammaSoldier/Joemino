@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,12 +14,22 @@ public class DlgHighscore extends Dialog {
 
     private MainActivity mContext;
     private String name;
+    private String mFontLocation;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     DlgHighscore(Context context) {
         super(context);
         mContext = (MainActivity)context;
+        mFontLocation = null;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public void setFont( String fontLocation ) {
+        mFontLocation = fontLocation;
+    }// setFont
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +57,17 @@ public class DlgHighscore extends Dialog {
                 mContext.SetHighscoreName( name );
            }// onClick
         });
-    }
 
+        GuiFontDecoration fontDecoration = new GuiFontDecoration( mContext, mFontLocation );
+        fontDecoration.overrideFonts( mContext, getWindow().getDecorView());
+
+    }// onCreate
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     public String getName() {
         return name;
-    }
+    }// getName
+
+
+
 }

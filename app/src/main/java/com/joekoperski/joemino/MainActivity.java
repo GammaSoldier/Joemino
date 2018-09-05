@@ -1,6 +1,6 @@
-// TODO display scores
-// TODO use custom font for dialogs (https://stackoverflow.com/questions/27588965/how-to-use-custom-font-in-a-project-written-in-android-studio)
+// TODO Dialog background resizable
 // TODO explode tiles
+// TODO define screen positions for all GUI elements in fractions of screen size
 // TODO Release Version
 
 package com.joekoperski.joemino;
@@ -75,17 +75,17 @@ public class MainActivity extends Activity {
         layoutScoreView = new RelativeLayout(this);
 
         scoreView = new BitmapTextView(this);
-        scoreView.init(displaySize.x / 5, displaySize.y / 15, R.drawable.score_display_right);
+        scoreView.init(displaySize.x / 5, displaySize.y / 15, R.drawable.score_display_right, "fonts/SHOWG.TTF");
         scoreView.setTextColor( Color.WHITE );
-        scoreView.setText( "Score" );
+        scoreView.setText( "0" );
         scoreView.setTextSize( COMPLEX_UNIT_FRACTION, 76 );
         scoreView.setX( displaySize.x / 2 );
         scoreView.setY( displaySize.y / 8 );
 
         scoreTextView = new BitmapTextView(this);
-        scoreTextView.init(displaySize.x / 5, displaySize.y / 15, R.drawable.score_display_left);
+        scoreTextView.init(displaySize.x / 5, displaySize.y / 15, R.drawable.score_display_left,  "fonts/SHOWG.TTF");
         scoreTextView.setTextColor( Color.WHITE );
-        scoreTextView.setText( "Tiles:" );
+        scoreTextView.setText( R.string.str_score_text );
         scoreTextView.setTextSize( COMPLEX_UNIT_FRACTION, 76 );
         scoreTextView.setX(  displaySize.x / 2 - displaySize.x / 5 );
         scoreTextView.setY( displaySize.y / 8 );
@@ -119,6 +119,7 @@ public class MainActivity extends Activity {
         buttonScore.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 DlgScores dlgScores = new DlgScores( MainActivity.this );
+                dlgScores.setFont( "fonts/SHOWG.TTF");
                 dlgScores.show();
             }
         } );
@@ -237,6 +238,7 @@ public class MainActivity extends Activity {
                     if( gameRules.compareScore( scores.getAt(i).score) ) {
                         PlaySound( SOUND_VICTORY );
                         DlgHighscore dlgHighscore = new DlgHighscore( MainActivity.this );
+                        dlgHighscore.setFont("fonts/SHOWG.TTF");
                         dlgHighscore.show();
                         isHighscore = true;
                         break;
@@ -245,6 +247,7 @@ public class MainActivity extends Activity {
                 if( !isHighscore ){
                     PlaySound( SOUND_GAMEOVER );
                     DlgGameOver dialog = new DlgGameOver( this );
+                    dialog.setFont("fonts/SHOWG.TTF");
                     dialog.show();
                 }// if
                 break;

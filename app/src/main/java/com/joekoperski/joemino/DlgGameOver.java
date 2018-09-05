@@ -9,18 +9,28 @@ import android.widget.Button;
 public class DlgGameOver extends Dialog {
 
     private MainActivity mContext;
+    private String mFontLocation;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     DlgGameOver(Context context) {
         super(context);
         mContext = (MainActivity)context;
+        mFontLocation = null;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public void setFont( String fontLocation ) {
+        mFontLocation = fontLocation;
+    }// setFont
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Use the Builder class for convenient dialog construction
         setCancelable(false);
-
+        setTitle(R.string.app_name);
         setContentView(R.layout.game_over);
 
         Button buttonOK = (Button) findViewById(R.id.buttonOK);
@@ -31,6 +41,8 @@ public class DlgGameOver extends Dialog {
                 mContext.StartGame();
              }// onClick
         });
+        GuiFontDecoration fontDecoration = new GuiFontDecoration( mContext, mFontLocation );
+        fontDecoration.overrideFonts( mContext, getWindow().getDecorView());
 
     }// OnCreate
 }

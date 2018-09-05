@@ -11,17 +11,27 @@ import android.widget.TextView;
 public class DlgScores extends Dialog {
 
     private MainActivity parent;
-
+    private String mFontLocation;
     ////////////////////////////////////////////////////////////////////////////////////////////////
     DlgScores(MainActivity context) {
         super(context);
         parent = context;
+        mFontLocation = null;
     }// DlgScores
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public void setFont( String fontLocation ) {
+        mFontLocation = fontLocation;
+    }// setFont
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
 //        setTitle( R.string.str_highscores );
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
@@ -48,6 +58,8 @@ public class DlgScores extends Dialog {
                initList();
             }// onClick
         });
+        GuiFontDecoration fontDecoration = new GuiFontDecoration( parent, mFontLocation );
+        fontDecoration.overrideFonts( parent, getWindow().getDecorView());
     }// onCreate
 
 
@@ -81,5 +93,7 @@ public class DlgScores extends Dialog {
         textView = (TextView) findViewById( R.id.textView53 );
         textView.setText( Integer.toString(scores.getAt( 4 ).score) );
 
-    }
+    }// initList
+
 }// DlgScores
+
