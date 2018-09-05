@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 
 public class DlgGameOver extends Dialog {
@@ -30,7 +31,8 @@ public class DlgGameOver extends Dialog {
         super.onCreate(savedInstanceState);
         // Use the Builder class for convenient dialog construction
         setCancelable(false);
-        setTitle(R.string.app_name);
+//        setTitle(R.string.app_name);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.game_over);
 
         Button buttonOK = (Button) findViewById(R.id.buttonOK);

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,7 +37,8 @@ public class DlgHighscore extends Dialog {
 
         setCancelable(false);
 
-        setTitle( R.string.str_highscore );
+//        setTitle( R.string.str_highscore );
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.enter_score);
 
         Button buttonOK = (Button) findViewById(R.id.buttonOK);

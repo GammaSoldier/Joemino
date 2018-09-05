@@ -33,10 +33,10 @@ public class DlgScores extends Dialog {
         super.onCreate(savedInstanceState);
 
 
-//        setTitle( R.string.str_highscores );
-        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+        setTitle( R.string.str_highscores );
+//        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.score_board);
-        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.score_board_title);
         initList();
 
         //On Click listeners for the buttons present in the Dialog

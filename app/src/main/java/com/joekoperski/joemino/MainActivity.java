@@ -1,4 +1,3 @@
-// TODO Dialog background resizable
 // TODO explode tiles
 // TODO define screen positions for all GUI elements in fractions of screen size
 // TODO Release Version
@@ -74,21 +73,24 @@ public class MainActivity extends Activity {
         // score
         layoutScoreView = new RelativeLayout(this);
 
+        int width = (int)(displaySize.x * 5.0 / 20);
+        int height = displaySize.y / 16;
+        int x = displaySize.x / 2;
         scoreView = new BitmapTextView(this);
-        scoreView.init(displaySize.x / 5, displaySize.y / 15, R.drawable.score_display_right, "fonts/SHOWG.TTF");
+        scoreView.init( width, height, R.drawable.score_display_right, "fonts/SHOWG.TTF");
         scoreView.setTextColor( Color.WHITE );
         scoreView.setText( "0" );
-        scoreView.setTextSize( COMPLEX_UNIT_FRACTION, 76 );
-        scoreView.setX( displaySize.x / 2 );
-        scoreView.setY( displaySize.y / 8 );
+        scoreView.setTextSize( COMPLEX_UNIT_FRACTION, 72 );
+        scoreView.setX( x );
+        scoreView.setY( (int)(displaySize.y * 0.1375) );
 
         scoreTextView = new BitmapTextView(this);
-        scoreTextView.init(displaySize.x / 5, displaySize.y / 15, R.drawable.score_display_left,  "fonts/SHOWG.TTF");
+        scoreTextView.init(width, height, R.drawable.score_display_left,  "fonts/SHOWG.TTF");
         scoreTextView.setTextColor( Color.WHITE );
         scoreTextView.setText( R.string.str_score_text );
-        scoreTextView.setTextSize( COMPLEX_UNIT_FRACTION, 76 );
-        scoreTextView.setX(  displaySize.x / 2 - displaySize.x / 5 );
-        scoreTextView.setY( displaySize.y / 8 );
+        scoreTextView.setTextSize( COMPLEX_UNIT_FRACTION, 72 );
+        scoreTextView.setX(  x - width );
+        scoreTextView.setY( (int)(displaySize.y * 0.1375) );
 
         layoutScoreView.addView(scoreView);
         layoutScoreView.addView(scoreTextView);

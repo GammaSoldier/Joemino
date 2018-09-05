@@ -13,8 +13,8 @@ public class Playfield {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     Playfield() {
-        width = 6;
-        height = 6;
+        width = 12;
+        height = 12;
         numTiles = 5;
 
         mPlayfield = new int[ width][ height ];

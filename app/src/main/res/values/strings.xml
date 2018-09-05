@@ -8,7 +8,7 @@
     <string name="str_button_exit">Exit</string>
     <string name="str_highscores">Highscores</string>
     <string name="str_highscore">Highscore</string>
-    <string name="str_yourscore">Your Score %1$d </string>
+    <string name="str_yourscore">Your Score:   %1$d </string>
     <string name="str_gameover">Game Over</string>
     <string name="str_grats">Well done</string>
     <string name="str_score_text">Tiles:</string>
