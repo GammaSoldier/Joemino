@@ -1,4 +1,3 @@
-// TODO resize buttons correctly for any screen resolution
 // TODO show "Delete Scores" according to special condition (e.g. all highscores are "0")
 // TODO define screen positions for all GUI elements in fractions of screen size
 // TODO Release Version
@@ -7,6 +6,8 @@ package com.joekoperski.joemino;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.media.AudioManager;
@@ -76,7 +77,7 @@ public class MainActivity extends Activity {
         scoreView.setText( "0" );
         scoreView.setTextSize( COMPLEX_UNIT_FRACTION, 72 );
         scoreView.setX( x );
-        scoreView.setY( (int)(displaySize.y * 0.1375) );
+        scoreView.setY( (int)(displaySize.y * 0.1375d) );
 
         scoreTextView = new BitmapTextView(this);
         scoreTextView.init(width, height, R.drawable.score_display_left,  "fonts/SHOWG.TTF");
@@ -84,7 +85,7 @@ public class MainActivity extends Activity {
         scoreTextView.setText( R.string.str_score_text );
         scoreTextView.setTextSize( COMPLEX_UNIT_FRACTION, 72 );
         scoreTextView.setX(  x - width );
-        scoreTextView.setY( (int)(displaySize.y * 0.1375) );
+        scoreTextView.setY( (int)(displaySize.y * 0.1375d) );
 
         layoutScoreView.addView(scoreView);
         layoutScoreView.addView(scoreTextView);
@@ -93,9 +94,18 @@ public class MainActivity extends Activity {
         layoutGameButtons = new RelativeLayout(this);
 
         // TODO replace constants by variables
-        float ratioX = 336f / displaySize.x;
-        float ratioY = 264f / displaySize.y;
-        Point buttonSize = new Point( (int) ((float) (displaySize.x) * ratioX), (int) ((float) (displaySize.y) * ratioY));
+
+        BitmapFactory buttonBitmapFactory = new BitmapFactory();
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        Bitmap buttonBitmap = buttonBitmapFactory.decodeResource( getResources(), R.drawable.button_new_normal, options );
+
+        double ratioX = buttonBitmap.getWidth() / (double)displaySize.x;
+        double ratioY = buttonBitmap.getHeight() / (double)displaySize.y;
+
+        double zoomfactor = (displaySize.y / buttonBitmap.getHeight()) * 0.1375d;
+
+        Point buttonSize = new Point( (int) (buttonBitmap.getWidth() * zoomfactor), (int)(buttonBitmap.getHeight() * zoomfactor) );
         Point position;
 
         // Button New
