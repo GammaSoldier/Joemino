@@ -87,14 +87,6 @@ public class GameView extends SurfaceView implements Callback {
         bmpTiles[3] = BitmapFactory.decodeResource(getResources(), R.drawable.glass4);
         bmpTiles[4] = BitmapFactory.decodeResource(getResources(), R.drawable.glass5);
 
-/*
-		bmpTiles[0] = BitmapFactory.decodeResource(getResources(), R.drawable.tile1);
-		bmpTiles[1] = BitmapFactory.decodeResource(getResources(), R.drawable.tile2);
-		bmpTiles[2] = BitmapFactory.decodeResource(getResources(), R.drawable.tile3);
-		bmpTiles[3] = BitmapFactory.decodeResource(getResources(), R.drawable.tile4);
-		bmpTiles[4] = BitmapFactory.decodeResource(getResources(), R.drawable.tile5);
-*/
-
         bmpPlayfieldScreen[activePlayfieldScreen] = Bitmap.createBitmap(mPlayfieldScreen.x, mPlayfieldScreen.y, bmpPlayfieldBackground.getConfig());
 
         gfxLoopThread = new GfxLoopThread(this);

@@ -1,3 +1,4 @@
+// TODO splash screen
 // TODO graphical redesign
 // TODO define screen positions for all GUI elements in fractions of screen size
 // TODO Release Version
@@ -55,6 +56,7 @@ public class MainActivity extends Activity {
         RelativeLayout layoutTitleView;
 
         super.onCreate(savedInstanceState);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -93,14 +95,14 @@ public class MainActivity extends Activity {
         // score
         layoutScoreView = new RelativeLayout(this);
 
-        width = (int) (displaySize.x * 5.0 / 20);
-        height = displaySize.y / 16;
+        width = (int) (displaySize.x * 5d / 20);
+        height = (int)(displaySize.y / 22d);
         int x = displaySize.x / 2;
         scoreView = new BitmapTextView(this);
         scoreView.init(width, height, R.drawable.score_display_right, "fonts/SHOWG.TTF");
         scoreView.setTextColor(Color.WHITE);
         scoreView.setText("0");
-        scoreView.setTextSize(COMPLEX_UNIT_FRACTION, 72);
+        scoreView.setTextSize(COMPLEX_UNIT_FRACTION, 70);
         scoreView.setX(x);
         scoreView.setY((int) (displaySize.y * 0.1375d));
 
@@ -108,7 +110,7 @@ public class MainActivity extends Activity {
         scoreTextView.init(width, height, R.drawable.score_display_left, "fonts/SHOWG.TTF");
         scoreTextView.setTextColor(Color.WHITE);
         scoreTextView.setText(R.string.str_score_text);
-        scoreTextView.setTextSize(COMPLEX_UNIT_FRACTION, 72);
+        scoreTextView.setTextSize(COMPLEX_UNIT_FRACTION, 70);
         scoreTextView.setX(x - width);
         scoreTextView.setY((int) (displaySize.y * 0.1375d));
 

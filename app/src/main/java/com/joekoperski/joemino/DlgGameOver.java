@@ -31,7 +31,6 @@ public class DlgGameOver extends Dialog {
         super.onCreate(savedInstanceState);
         // Use the Builder class for convenient dialog construction
         setCancelable(false);
-//        setTitle(R.string.app_name);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.game_over);
 
