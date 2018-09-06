@@ -1,4 +1,5 @@
-// TODO explode tiles
+// TODO resize buttons correctly for any screen resolution
+// TODO show "Delete Scores" according to special condition (e.g. all highscores are "0")
 // TODO define screen positions for all GUI elements in fractions of screen size
 // TODO Release Version
 

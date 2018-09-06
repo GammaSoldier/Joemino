@@ -1,8 +1,32 @@
 package com.joekoperski.joemino;
 
+
+/* neat code snippet for logging a playfield map
+
+Log.d( "GameRules", "deleteNeighbours" );
+        for( int i = 0; i < 6; i++ ){
+        sleep(10);
+
+        Log.d( "GameRules",
+        " " + (playfield.GetDestinationMap( 0, i ) == -1 ? "." : playfield.GetDestinationMap( 0, i )) +
+        " " + (playfield.GetDestinationMap( 1, i ) == -1 ? "." : playfield.GetDestinationMap( 1, i )) +
+        " " + (playfield.GetDestinationMap( 2, i ) == -1 ? "." : playfield.GetDestinationMap( 2, i )) +
+        " " + (playfield.GetDestinationMap( 3, i ) == -1 ? "." : playfield.GetDestinationMap( 3, i )) +
+        " " + (playfield.GetDestinationMap( 4, i ) == -1 ? "." : playfield.GetDestinationMap( 4, i )) +
+        " " + (playfield.GetDestinationMap( 5, i ) == -1 ? "." : playfield.GetDestinationMap( 5, i ))
+        );
+        }
+        sleep(10);
+*/
+
+
+
 import android.graphics.Point;
+import android.util.Log;
 
 import java.util.Random;
+
+import static android.os.SystemClock.sleep;
 
 public class GameRules {
 
@@ -24,11 +48,10 @@ public class GameRules {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     GameRules( Playfield playfield ) {
-        mScore = playfield.GetHeight() * playfield.GetWidth();
 
         Random rnd = new Random();
 
-
+/*
         int testMap[][] = {
                  {-1,-1, 2,-1,-1,-1}
                 ,{ 1, 1, 3, 3, 4,-1}
@@ -39,11 +62,21 @@ public class GameRules {
         };
 
 
+        int testMap[][] = {
+                 { 0, 0, 2, 0, 0, 0}
+                ,{ 1, 1, 3, 3, 4, 0}
+                ,{ 0, 1, 3, 2, 4, 0}
+                ,{ 1, 1, 2, 2, 2, 3}
+                ,{ 1, 0, 2, 2, 2, 1}
+                ,{ 1, 1, 1, 2, 1, 3}
+        };
+*/
+
 
         for( int j=0; j< playfield.GetHeight(); j++ ) {
             for( int i=0; i< playfield.GetWidth(); i++ ) {
-//                playfield.Set( i, j , rnd.nextInt( playfield.GetNumTiles()) );
-               playfield.Set( i, j , testMap[j][i] );
+                playfield.Set( i, j , rnd.nextInt( playfield.GetNumTiles()) );
+//                playfield.Set( i, j , testMap[j][i] );
                 playfield.SetDestinationMap( i, j , playfield.Get(i, j) );
                 playfield.SetMovemap(i, j, new Point( i, j ));
             }// for i
@@ -57,6 +90,7 @@ public class GameRules {
         }
 */
 
+        mScore = playfield.GetHeight() * playfield.GetWidth();
         moveState = STATE_DELETE;
     }// GameRules
 
@@ -133,28 +167,28 @@ public class GameRules {
 
         // check upper tile
         if( y > 0 )	 {
-            if( playfield.Get(x, y-1) == actualTile ) {		// is neighbour the same tile as the actual?
+            if( playfield.GetDestinationMap(x, y-1) == actualTile ) {		// is neighbour the same tile as the actual?
                 numTiles += deleteNeighbours( playfield, x, y-1 );
             }// if
         }// if
 
         // check lower tile
         if( y+1 < playfield.GetHeight() )	 {
-            if( playfield.Get(x, y+1) == actualTile ) {		// is neighbour the same tile as the actual?
+            if( playfield.GetDestinationMap(x, y+1) == actualTile ) {		// is neighbour the same tile as the actual?
                 numTiles += deleteNeighbours( playfield, x, y+1 );
             }// if
         }// if
 
         // check left tile
         if( x > 0 )	 {
-            if( playfield.Get(x-1, y) == actualTile ) {		// is neighbour the same tile as the actual?
+            if( playfield.GetDestinationMap(x-1, y) == actualTile ) {		// is neighbour the same tile as the actual?
                 numTiles += deleteNeighbours( playfield, x-1, y );
             }// if
         }// if
 
         // check right tile
         if( x+1 < playfield.GetWidth() )	 {
-            if( playfield.Get(x+1, y) == actualTile ) {		// is neighbour the same tile as the actual?
+            if( playfield.GetDestinationMap(x+1, y) == actualTile ) {		// is neighbour the same tile as the actual?
                 numTiles += deleteNeighbours( playfield, x+1, y );
             }// if
         }// if
