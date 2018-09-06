@@ -213,6 +213,7 @@ public class GameView extends SurfaceView implements Callback {
 //                        deletionRunning = true;
                     } else if (moveTo.x > i) {
                         // move tile horizontally
+                        Log.d( "GameView", "animateTileMoveHorizontal i: " + i + " j: " +j);
                         animationRunning = animateTileMoveHorizontal(canvas, playfield, i, j, sizeX, sizeY, smoothAnimationStep);
                     }// if
                     else if (moveTo.y > j) {
@@ -254,14 +255,15 @@ public class GameView extends SurfaceView implements Callback {
 	////////////////////////////////////////////////////////////////////////////////////////////////
     private Boolean animateTileErase(Canvas canvas, Playfield playfield, int posX, int posY, int tileSizeX, int tileSizeY, float deletionStep) {
         Point moveTo = playfield.GetMovemap(posX, posY);
+        float shrinkStep = deletionStep / 2;
         // erase tile
         Bitmap background = Bitmap.createBitmap(bmpPlayfieldBackground, posX * tileSizeX, posY * tileSizeY, tileSizeX, tileSizeY);
         canvas.drawBitmap(background, null, new Rect(posX * tileSizeX, posY * tileSizeY, (posX + 1) * tileSizeX, (posY + 1) * tileSizeY), null);
 
-        Rect rect = new Rect(posX * tileSizeX + (int) (deletionStep * tileSizeX),
-                (posY * tileSizeY) + (int) (deletionStep * tileSizeY),
-                (posX + 1) * tileSizeX - (int) (deletionStep * tileSizeX),
-                (posY + 1) * tileSizeY - (int) (deletionStep * tileSizeY));
+        Rect rect = new Rect(posX * tileSizeX + (int) (shrinkStep * tileSizeX),
+                (posY * tileSizeY) + (int) (shrinkStep * tileSizeY),
+                (posX + 1) * tileSizeX - (int) (shrinkStep * tileSizeX),
+                (posY + 1) * tileSizeY - (int) (shrinkStep * tileSizeY));
 
         canvas.drawBitmap(bmpTiles[playfield.Get(posX,posY)], null, rect, null);
         if (deletionStep >= 1.0f) {
@@ -299,14 +301,37 @@ public class GameView extends SurfaceView implements Callback {
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	private Boolean animateTileMoveHorizontal( Canvas canvas, Playfield playfield, int posX, int posY, int tileSizeX, int tileSizeY, float animationStep ) {
 		int tileOffsetX = (int)(tileSizeX * animationStep);
-		// erase source area only if no left neighbour
+        int tmp;
+        // erase source area only if no left neighbour
 		if( playfield.Get(posX - 1, posY) == -1 ) {
 			Bitmap background = Bitmap.createBitmap(bmpPlayfieldBackground, posX * tileSizeX, posY * tileSizeY, tileSizeX, tileSizeY);
 			canvas.drawBitmap(background, null, new Rect(posX * tileSizeX, posY * tileSizeY, (posX + 1) * tileSizeX, (posY + 1) * tileSizeY), null);
 		}// if
+        for( int j = 0; j < 6; j++ ) {
+            Log.d("GameView", " " + playfield.GetMovemap(0, j)
+                    + " " + playfield.GetMovemap(1, j)
+                    + " " + playfield.GetMovemap(2, j)
+                    + " " + playfield.GetMovemap(3, j)
+                    + " " + playfield.GetMovemap(4, j)
+                    + " " + playfield.GetMovemap(5, j)
+            );
+        }
+        for( int j = 0; j < 6; j++ ) {
+            Log.d("GameView", " " + playfield.Get(0, j)
+                    + " " + playfield.Get(1, j)
+                    + " " + playfield.Get(2, j)
+                    + " " + playfield.Get(3, j)
+                    + " " + playfield.Get(4, j)
+                    + " " + playfield.Get(5, j)
+            );
+        }
+        tmp = playfield.Get(posX, posY);
+        if( tmp  < 0 ) {
+            Log.d("GameView", "Index out of Bounds: i: " + posX + " j: " + posY + " tile: " + tmp);
 
-		canvas.drawBitmap(bmpTiles[playfield.Get(posX, posY)], null, new Rect( posX * tileSizeX + tileOffsetX, posY * tileSizeY, (posX + 1) * tileSizeX + tileOffsetX, (posY + 1) * tileSizeY), null);
-
+        } else {
+            canvas.drawBitmap(bmpTiles[playfield.Get(posX, posY)], null, new Rect(posX * tileSizeX + tileOffsetX, posY * tileSizeY, (posX + 1) * tileSizeX + tileOffsetX, (posY + 1) * tileSizeY), null);
+        }
 		if( animationStep >= 1.0f) {
 			playfield.SetMovemap(posX + 1, posY, playfield.GetMovemap(posX, posY));
 			playfield.SetMovemap(posX, posY, new Point(posX, posY));

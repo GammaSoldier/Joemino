@@ -28,7 +28,7 @@ public class GameRules {
 
         Random rnd = new Random();
 
-/*
+
         int testMap[][] = {
                  {-1,-1, 2,-1,-1,-1}
                 ,{ 1, 1, 3, 3, 4,-1}
@@ -37,13 +37,13 @@ public class GameRules {
                 ,{ 1, 0, 2, 4, 2, 1}
                 ,{ 1, 1, 2, 3, 2, 3}
         };
-*/
+
 
 
         for( int j=0; j< playfield.GetHeight(); j++ ) {
             for( int i=0; i< playfield.GetWidth(); i++ ) {
-                playfield.Set( i, j , rnd.nextInt( playfield.GetNumTiles()) );
-//                playfield.Set( i, j , testMap[j][i] );
+//                playfield.Set( i, j , rnd.nextInt( playfield.GetNumTiles()) );
+               playfield.Set( i, j , testMap[j][i] );
                 playfield.SetDestinationMap( i, j , playfield.Get(i, j) );
                 playfield.SetMovemap(i, j, new Point( i, j ));
             }// for i
