@@ -27,8 +27,8 @@ public class Scores {
         SharedPreferences pref = mContext.getSharedPreferences("Preferences", mContext. MODE_PRIVATE); // 0 - for private mode
 
         for( int i = 0; i < numScores; i++ ) {
-            entry[i].score = pref.getInt("Score"+i, -1); // getting Integer
-            entry[i].name = pref.getString("Name"+i, null); // getting String
+            entry[i].score = pref.getInt("Score"+i, mContext.getResources().getInteger(R.integer.value_highscore_default)); // getting Integer
+            entry[i].name = pref.getString("Name"+i, mContext.getResources().getString(R.string.str_highscore_entry_default_text) ); // getting String
         }// for i
 
     }// load

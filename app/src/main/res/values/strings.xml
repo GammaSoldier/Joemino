@@ -7,6 +7,7 @@
     <string name="str_button_score">Score</string>
     <string name="str_button_exit">Exit</string>
     <string name="str_highscores">Highscores</string>
+    <string name="str_highscore_entry_default_text">Try to beat this</string>
     <string name="str_highscore">Highscore</string>
     <string name="str_yourscore">Your Score:   %1$d </string>
     <string name="str_gameover">Game Over</string>

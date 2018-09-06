@@ -34,7 +34,6 @@ public class DlgScores extends Dialog {
 
 
         setTitle( R.string.str_highscores );
-//        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.score_board);
         initList();

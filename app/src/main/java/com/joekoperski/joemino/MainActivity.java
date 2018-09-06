@@ -190,8 +190,8 @@ public class MainActivity extends Activity {
         Scores scores = new Scores( this );
 
         for( int i = 0; i < scores.getNumScores(); i++ ){
-            highscoreEntry.name = "";
-            highscoreEntry.score = -1;
+            highscoreEntry.name = getResources().getString( R.string.str_highscore_entry_default_text);
+            highscoreEntry.score = getResources().getInteger(R.integer.value_highscore_default);
             scores.insertAt( i, highscoreEntry );
         }// for i
         scores.save();
