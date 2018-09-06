@@ -93,19 +93,11 @@ public class MainActivity extends Activity {
         // Buttons
         layoutGameButtons = new RelativeLayout(this);
 
-        // TODO replace constants by variables
-
         BitmapFactory buttonBitmapFactory = new BitmapFactory();
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-        Bitmap buttonBitmap = buttonBitmapFactory.decodeResource( getResources(), R.drawable.button_new_normal, options );
-
-        double ratioX = buttonBitmap.getWidth() / (double)displaySize.x;
-        double ratioY = buttonBitmap.getHeight() / (double)displaySize.y;
-
-        double zoomfactor = (displaySize.y / buttonBitmap.getHeight()) * 0.1375d;
-
+        Bitmap buttonBitmap = buttonBitmapFactory.decodeResource( getResources(), R.drawable.button_new_normal  );
+        double zoomfactor = (displaySize.y * 0.1375d ) / buttonBitmap.getHeight() ;
         Point buttonSize = new Point( (int) (buttonBitmap.getWidth() * zoomfactor), (int)(buttonBitmap.getHeight() * zoomfactor) );
+
         Point position;
 
         // Button New
@@ -114,7 +106,7 @@ public class MainActivity extends Activity {
         buttonNew.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 StartGame();
-            }
+            }// onClick
         } );
 
         // Button Score
@@ -125,7 +117,7 @@ public class MainActivity extends Activity {
                 DlgScores dlgScores = new DlgScores( MainActivity.this );
                 dlgScores.setFont( "fonts/SHOWG.TTF");
                 dlgScores.show();
-            }
+            }// onClick
         } );
 
         // Button Exit
@@ -135,7 +127,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 // Exit the app
                 moveTaskToBack(true);
-            }
+            }// onClick
         } );
 
         layoutGameButtons.addView(  buttonNew );
@@ -167,8 +159,6 @@ public class MainActivity extends Activity {
         sm[SOUND_CLICK] = soundPool.load(this, R.raw.click, 1);
         sm[SOUND_VICTORY] = soundPool.load(this, R.raw.victory, 1);
         sm[SOUND_GAMEOVER] = soundPool.load(this, R.raw.gameover, 1);
-
-
     }// onCreate
 
 
