@@ -1,6 +1,7 @@
 package com.joekoperski.joemino;
 
 import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -12,6 +13,7 @@ public class DlgScores extends Dialog {
 
     private MainActivity parent;
     private String mFontLocation;
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     DlgScores(MainActivity context) {
         super(context);
@@ -21,10 +23,9 @@ public class DlgScores extends Dialog {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public void setFont( String fontLocation ) {
+    public void setFont(String fontLocation) {
         mFontLocation = fontLocation;
     }// setFont
-
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +34,7 @@ public class DlgScores extends Dialog {
         super.onCreate(savedInstanceState);
 
 
-        setTitle( R.string.str_highscores );
+        setTitle(R.string.str_highscores);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.score_board);
         initList();
@@ -50,49 +51,52 @@ public class DlgScores extends Dialog {
         });
 
         buttonDel.setOnClickListener(new View.OnClickListener() {
-           @Override
+            @Override
             public void onClick(View v) {
                 //Fire an intent on click of this button
-               parent.DeleteScores();
-               initList();
+                parent.DeleteScores();
+                initList();
             }// onClick
         });
-        GuiFontDecoration fontDecoration = new GuiFontDecoration( parent, mFontLocation );
-        fontDecoration.overrideFonts( parent, getWindow().getDecorView());
+        GuiFontDecoration fontDecoration = new GuiFontDecoration(parent, mFontLocation);
+        fontDecoration.overrideFonts(parent, getWindow().getDecorView());
     }// onCreate
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     private void initList() {
         Scores scores = new Scores(parent);
+        int score;
 
         TextView textView;
-        textView = (TextView) findViewById( R.id.textView12 );
-        textView.setText( scores.getAt( 0 ).name );
-        textView = (TextView) findViewById( R.id.textView13 );
-        textView.setText( Integer.toString(scores.getAt( 0 ).score) );
 
-        textView = (TextView) findViewById( R.id.textView22 );
-        textView.setText( scores.getAt( 1 ).name );
-        textView = (TextView) findViewById( R.id.textView23 );
-        textView.setText( Integer.toString(scores.getAt( 1 ).score) );
+        int viewId[][] = {
+                  {R.id.textView11, R.id.textView12, R.id.textView13}
+                , {R.id.textView21, R.id.textView22, R.id.textView23}
+                , {R.id.textView31, R.id.textView32, R.id.textView33}
+                , {R.id.textView41, R.id.textView42, R.id.textView43}
+                , {R.id.textView51, R.id.textView52, R.id.textView53}
+        };
 
-        textView = (TextView) findViewById( R.id.textView32 );
-        textView.setText( scores.getAt( 2 ).name );
-        textView = (TextView) findViewById( R.id.textView33 );
-        textView.setText( Integer.toString(scores.getAt( 2 ).score) );
-
-        textView = (TextView) findViewById( R.id.textView42 );
-        textView.setText( scores.getAt( 3 ).name );
-        textView = (TextView) findViewById( R.id.textView43 );
-        textView.setText( Integer.toString(scores.getAt( 3 ).score) );
-
-        textView = (TextView) findViewById( R.id.textView52 );
-        textView.setText( scores.getAt( 4 ).name );
-        textView = (TextView) findViewById( R.id.textView53 );
-        textView.setText( Integer.toString(scores.getAt( 4 ).score) );
+        for (int i = 0; i < 5; i++) {
+            score = scores.getAt(i).score;
+            textView = (TextView) findViewById(viewId[i][1]);
+            textView.setText(scores.getAt(i).name);
+            textView = (TextView) findViewById(viewId[i][2]);
+            textView.setText(Integer.toString(score));
+            for (int j = 0; j < 3; j++) {
+                setThresholdEntryColor(viewId[i][j], score);
+            }// for j
+        }// for i
 
     }// initList
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    private void setThresholdEntryColor(int id, int score) {
+        if (score < parent.getResources().getInteger(R.integer.value_highscore_theshold)) {
+            ((TextView) findViewById(id)).setTextColor(Color.rgb(255, 120, 255));
+        }// if
+    }// setThresholdEntryColor
 }// DlgScores
 

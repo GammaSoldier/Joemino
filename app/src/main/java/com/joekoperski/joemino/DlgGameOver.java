@@ -15,12 +15,12 @@ public class DlgGameOver extends Dialog {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     DlgGameOver(Context context) {
         super(context);
-        mContext = (MainActivity)context;
+        mContext = (MainActivity) context;
         mFontLocation = null;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public void setFont( String fontLocation ) {
+    public void setFont(String fontLocation) {
         mFontLocation = fontLocation;
     }// setFont
 
@@ -41,10 +41,10 @@ public class DlgGameOver extends Dialog {
             public void onClick(View v) {
                 dismiss();
                 mContext.StartGame();
-             }// onClick
+            }// onClick
         });
-        GuiFontDecoration fontDecoration = new GuiFontDecoration( mContext, mFontLocation );
-        fontDecoration.overrideFonts( mContext, getWindow().getDecorView());
+        GuiFontDecoration fontDecoration = new GuiFontDecoration(mContext, mFontLocation);
+        fontDecoration.overrideFonts(mContext, getWindow().getDecorView());
 
     }// OnCreate
 }

@@ -20,13 +20,9 @@ Log.d( "GameRules", "deleteNeighbours" );
 */
 
 
-
 import android.graphics.Point;
-import android.util.Log;
 
 import java.util.Random;
-
-import static android.os.SystemClock.sleep;
 
 public class GameRules {
 
@@ -47,7 +43,7 @@ public class GameRules {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    GameRules( Playfield playfield ) {
+    GameRules(Playfield playfield) {
 
         Random rnd = new Random();
 
@@ -73,12 +69,12 @@ public class GameRules {
 */
 
 
-        for( int j=0; j< playfield.GetHeight(); j++ ) {
-            for( int i=0; i< playfield.GetWidth(); i++ ) {
-                playfield.Set( i, j , rnd.nextInt( playfield.GetNumTiles()) );
+        for (int j = 0; j < playfield.GetHeight(); j++) {
+            for (int i = 0; i < playfield.GetWidth(); i++) {
+                playfield.Set(i, j, rnd.nextInt(playfield.GetNumTiles()));
 //                playfield.Set( i, j , testMap[j][i] );
-                playfield.SetDestinationMap( i, j , playfield.Get(i, j) );
-                playfield.SetMovemap(i, j, new Point( i, j ));
+                playfield.SetDestinationMap(i, j, playfield.Get(i, j));
+                playfield.SetMovemap(i, j, new Point(i, j));
             }// for i
         }// for j
 
@@ -96,25 +92,25 @@ public class GameRules {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public int makeMove( Playfield playfield, int x, int y ) {
+    public int makeMove(Playfield playfield, int x, int y) {
         int actualTile;
         Point keepMoveIndex = new Point();
         int retVal = CONTINUE;
 
         // init movemap
-        initMoveMap( playfield );
+        initMoveMap(playfield);
 
-        switch(moveState) {
+        switch (moveState) {
             case STATE_DELETE:     // delete neighbours
                 // is validTile
-                if ( playfield.isValid(x, y) ) {
-                    actualTile = playfield.Get( x, y );
+                if (playfield.isValid(x, y)) {
+                    actualTile = playfield.Get(x, y);
                     keepMoveIndex = playfield.GetMovemap(x, y);
-                    int removed = deleteNeighbours( playfield, x, y );
-                    if( removed == 1 ){ // only 1 tile removable
+                    int removed = deleteNeighbours(playfield, x, y);
+                    if (removed == 1) { // only 1 tile removable
                         // restore clicked tile
-                        playfield.Set( x, y, actualTile );
-                        playfield.SetDestinationMap( x, y, actualTile );
+                        playfield.Set(x, y, actualTile);
+                        playfield.SetDestinationMap(x, y, actualTile);
                         playfield.SetMovemap(x, y, keepMoveIndex);
                         retVal = FORBIDDEN;
                     }// if
@@ -126,20 +122,20 @@ public class GameRules {
                 }// if
                 break;
             case STATE_DROP:     // drop column
-                syncMaps( playfield );
-                dropColumn( playfield );
+                syncMaps(playfield);
+                dropColumn(playfield);
                 retVal = CONTINUE_MOVE;
                 moveState = STATE_COMPRESS;
                 break;
             case STATE_COMPRESS:     // compress
-                syncMaps( playfield );
-                compress( playfield );
+                syncMaps(playfield);
+                compress(playfield);
                 retVal = CONTINUE_MOVE;
                 moveState = STATE_FINISHED;
                 break;
             case STATE_FINISHED:
-                syncMaps( playfield );
-                if( !pairsLeft( playfield ) ) {
+                syncMaps(playfield);
+                if (!pairsLeft(playfield)) {
                     retVal = GAMEOVER;
                 }// if
                 else {
@@ -156,57 +152,57 @@ public class GameRules {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private int deleteNeighbours( Playfield playfield, int x, int y ) {
+    private int deleteNeighbours(Playfield playfield, int x, int y) {
 
         int numTiles = 0;
-        int actualTile = playfield.Get( x, y );
+        int actualTile = playfield.Get(x, y);
 
-        playfield.Set( x, y, -1 );
-        playfield.SetDestinationMap( x, y, -1 );
-        playfield.SetMovemap( x, y, new Point(MOVE_DELETE, MOVE_DELETE) );
+        playfield.Set(x, y, -1);
+        playfield.SetDestinationMap(x, y, -1);
+        playfield.SetMovemap(x, y, new Point(MOVE_DELETE, MOVE_DELETE));
 
         // check upper tile
-        if( y > 0 )	 {
-            if( playfield.GetDestinationMap(x, y-1) == actualTile ) {		// is neighbour the same tile as the actual?
-                numTiles += deleteNeighbours( playfield, x, y-1 );
+        if (y > 0) {
+            if (playfield.GetDestinationMap(x, y - 1) == actualTile) {        // is neighbour the same tile as the actual?
+                numTiles += deleteNeighbours(playfield, x, y - 1);
             }// if
         }// if
 
         // check lower tile
-        if( y+1 < playfield.GetHeight() )	 {
-            if( playfield.GetDestinationMap(x, y+1) == actualTile ) {		// is neighbour the same tile as the actual?
-                numTiles += deleteNeighbours( playfield, x, y+1 );
+        if (y + 1 < playfield.GetHeight()) {
+            if (playfield.GetDestinationMap(x, y + 1) == actualTile) {        // is neighbour the same tile as the actual?
+                numTiles += deleteNeighbours(playfield, x, y + 1);
             }// if
         }// if
 
         // check left tile
-        if( x > 0 )	 {
-            if( playfield.GetDestinationMap(x-1, y) == actualTile ) {		// is neighbour the same tile as the actual?
-                numTiles += deleteNeighbours( playfield, x-1, y );
+        if (x > 0) {
+            if (playfield.GetDestinationMap(x - 1, y) == actualTile) {        // is neighbour the same tile as the actual?
+                numTiles += deleteNeighbours(playfield, x - 1, y);
             }// if
         }// if
 
         // check right tile
-        if( x+1 < playfield.GetWidth() )	 {
-            if( playfield.GetDestinationMap(x+1, y) == actualTile ) {		// is neighbour the same tile as the actual?
-                numTiles += deleteNeighbours( playfield, x+1, y );
+        if (x + 1 < playfield.GetWidth()) {
+            if (playfield.GetDestinationMap(x + 1, y) == actualTile) {        // is neighbour the same tile as the actual?
+                numTiles += deleteNeighbours(playfield, x + 1, y);
             }// if
         }// if
-        playfield.Set( x, y, actualTile );
+        playfield.Set(x, y, actualTile);
         numTiles++;
         return numTiles;
     }// deleteNeighbours
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private void dropColumn( Playfield playfield ) {
+    private void dropColumn(Playfield playfield) {
 
-        for( int i = 0; i < playfield.GetWidth(); i++ ) {
-            for( int j = playfield.GetHeight() - 1; j >= 0; j-- ) {
-                if( playfield.Get( i, j) == -1 ) {
+        for (int i = 0; i < playfield.GetWidth(); i++) {
+            for (int j = playfield.GetHeight() - 1; j >= 0; j--) {
+                if (playfield.Get(i, j) == -1) {
                     // found deleted tile
-                    if( isUpperColumn(playfield, i, j)) {
-                        dropTile( playfield, i, j );
+                    if (isUpperColumn(playfield, i, j)) {
+                        dropTile(playfield, i, j);
                         break;      // leave loop
                     }// if
                 }// if
@@ -216,21 +212,21 @@ public class GameRules {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private void dropTile( Playfield playfield, int x, int y ) {
+    private void dropTile(Playfield playfield, int x, int y) {
         int dropStep = 1;
 
-        if( y > 0 ) {
-            for( int i = y - 1; i >= 0; i-- ){
-                int tile = playfield.Get( x, i);
-                if( tile == -1 ) {
+        if (y > 0) {
+            for (int i = y - 1; i >= 0; i--) {
+                int tile = playfield.Get(x, i);
+                if (tile == -1) {
                     dropStep++;
                 }  // if
                 else {
                     Point moveTo = playfield.GetMovemap(x, i);
                     moveTo.y += dropStep;
                     playfield.SetMovemap(x, i, moveTo);
-                    playfield.SetDestinationMap( x, i + dropStep, playfield.Get(x, i) );
-                    playfield.SetDestinationMap( x, i, -1 );
+                    playfield.SetDestinationMap(x, i + dropStep, playfield.Get(x, i));
+                    playfield.SetDestinationMap(x, i, -1);
                 }
             }// for i
         }// if
@@ -238,24 +234,24 @@ public class GameRules {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private void compress( Playfield playfield ) {
+    private void compress(Playfield playfield) {
         int moveStep = 0;
         Boolean found = false;
 
-        for( int i = playfield.GetWidth() - 1; i >= 0; i--) {
-            if(  playfield.Get( i, playfield.GetHeight() - 1 ) == -1 ) {
+        for (int i = playfield.GetWidth() - 1; i >= 0; i--) {
+            if (playfield.Get(i, playfield.GetHeight() - 1) == -1) {
                 moveStep++;
                 found = true;
             }// if
-            else{
-                if( found ){
-                    for( int j=0; j<playfield.GetHeight(); j++) {
+            else {
+                if (found) {
+                    for (int j = 0; j < playfield.GetHeight(); j++) {
                         Point moveTo = playfield.GetMovemap(i, j);
                         moveTo.x += moveStep;
-                        playfield.SetMovemap( i, j, moveTo );
+                        playfield.SetMovemap(i, j, moveTo);
 
-                        playfield.SetDestinationMap( i + moveStep, j, playfield.Get( i, j ));
-                        playfield.SetDestinationMap( i, j, -1);
+                        playfield.SetDestinationMap(i + moveStep, j, playfield.Get(i, j));
+                        playfield.SetDestinationMap(i, j, -1);
                     }// for j
                 }
             }// else
@@ -264,10 +260,10 @@ public class GameRules {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private Boolean isUpperColumn ( Playfield playfield, int x ,int y ) {
-        if( y <= 0 ) return false;
-        for( int i = y-1; i >= 0; i-- ) {
-            if( playfield.Get( x, i ) != -1 )
+    private Boolean isUpperColumn(Playfield playfield, int x, int y) {
+        if (y <= 0) return false;
+        for (int i = y - 1; i >= 0; i--) {
+            if (playfield.Get(x, i) != -1)
                 return true;
         }// for i
         return false;
@@ -275,21 +271,21 @@ public class GameRules {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private Boolean pairsLeft( Playfield playfield ) {
+    private Boolean pairsLeft(Playfield playfield) {
         int tile;
 
-        for(int j=0; j < playfield.GetHeight(); j++) {
-            for( int i=0; i<playfield.GetWidth(); i++) {
-                tile = playfield.Get( i, j );
+        for (int j = 0; j < playfield.GetHeight(); j++) {
+            for (int i = 0; i < playfield.GetWidth(); i++) {
+                tile = playfield.Get(i, j);
 
-                if( tile >= 0 ) {
-                    if( i < playfield.GetWidth() -1) {
-                        if ( tile == playfield.Get( i+1, j ))
+                if (tile >= 0) {
+                    if (i < playfield.GetWidth() - 1) {
+                        if (tile == playfield.Get(i + 1, j))
                             return true;
                     }// if
 
-                    if( j < playfield.GetHeight() -1) {
-                        if ( tile == playfield.Get( i, j+1 ) )
+                    if (j < playfield.GetHeight() - 1) {
+                        if (tile == playfield.Get(i, j + 1))
                             return true;
                     }// if
                 }// if
@@ -307,31 +303,31 @@ public class GameRules {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public Boolean compareScore( int score ) {
-        if( score < 0 ) {
+    public Boolean compareScore(int score) {
+        if (score < 0) {
             return true;
         }// if
         else {
-            return (mScore <= score );
+            return (mScore <= score);
         }// else
     }// compareScore
 
 
-    private void initMoveMap( Playfield playfield ) {
-        for( int j=0; j< playfield.GetHeight(); j++ ) {
-            for( int i=0; i< playfield.GetWidth(); i++ ) {
-                playfield.SetMovemap(i, j, new Point( i, j ));
+    private void initMoveMap(Playfield playfield) {
+        for (int j = 0; j < playfield.GetHeight(); j++) {
+            for (int i = 0; i < playfield.GetWidth(); i++) {
+                playfield.SetMovemap(i, j, new Point(i, j));
             }// for i
         }// for j
 
     }// initMoveMap
 
 
-    public void syncMaps( Playfield playfield ) {
-        for( int j=0; j< playfield.GetHeight(); j++ ) {
-            for( int i=0; i< playfield.GetWidth(); i++ ) {
-                playfield.Set( i, j , playfield.GetDestinationMap(i, j) );
-                playfield.SetMovemap(i, j, new Point( i, j ));
+    public void syncMaps(Playfield playfield) {
+        for (int j = 0; j < playfield.GetHeight(); j++) {
+            for (int i = 0; i < playfield.GetWidth(); i++) {
+                playfield.Set(i, j, playfield.GetDestinationMap(i, j));
+                playfield.SetMovemap(i, j, new Point(i, j));
             }// for i
         }// for j
     }

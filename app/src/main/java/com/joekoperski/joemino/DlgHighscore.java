@@ -20,12 +20,12 @@ public class DlgHighscore extends Dialog {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     DlgHighscore(Context context) {
         super(context);
-        mContext = (MainActivity)context;
+        mContext = (MainActivity) context;
         mFontLocation = null;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public void setFont( String fontLocation ) {
+    public void setFont(String fontLocation) {
         mFontLocation = fontLocation;
     }// setFont
 
@@ -37,14 +37,13 @@ public class DlgHighscore extends Dialog {
 
         setCancelable(false);
 
-//        setTitle( R.string.str_highscore );
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.enter_score);
 
         Button buttonOK = (Button) findViewById(R.id.buttonOK);
-        TextView text = (TextView)findViewById( R.id.textViewScore );
+        TextView text = (TextView) findViewById(R.id.textViewScore);
 
-        text.setText( mContext.getString( R.string.str_yourscore, mContext.GetScore() ));
+        text.setText(mContext.getString(R.string.str_yourscore, mContext.GetScore()));
 
         // automatically show keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -53,15 +52,15 @@ public class DlgHighscore extends Dialog {
             @Override
             public void onClick(View v) {
                 dismiss();
-                EditText edit=(EditText)findViewById(R.id.editName);
-                name=edit.getText().toString();
+                EditText edit = (EditText) findViewById(R.id.editName);
+                name = edit.getText().toString();
 
-                mContext.SetHighscoreName( name );
-           }// onClick
+                mContext.SetHighscoreName(name);
+            }// onClick
         });
 
-        GuiFontDecoration fontDecoration = new GuiFontDecoration( mContext, mFontLocation );
-        fontDecoration.overrideFonts( mContext, getWindow().getDecorView());
+        GuiFontDecoration fontDecoration = new GuiFontDecoration(mContext, mFontLocation);
+        fontDecoration.overrideFonts(mContext, getWindow().getDecorView());
 
     }// onCreate
 
@@ -69,7 +68,6 @@ public class DlgHighscore extends Dialog {
     public String getName() {
         return name;
     }// getName
-
 
 
 }

@@ -11,9 +11,9 @@ public class GuiFontDecoration {
     private Typeface mFont;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    GuiFontDecoration( Context context, String fontLocation ) {
-        if( fontLocation != null ){
-            mFont = Typeface.createFromAsset( context.getAssets(), fontLocation);
+    GuiFontDecoration(Context context, String fontLocation) {
+        if (fontLocation != null) {
+            mFont = Typeface.createFromAsset(context.getAssets(), fontLocation);
         }// if
         else {
             mFont = Typeface.DEFAULT;
@@ -40,5 +40,4 @@ public class GuiFontDecoration {
         }// catch
     }// overrideFonts
 
-
-}
+}// GuiFontDecoration

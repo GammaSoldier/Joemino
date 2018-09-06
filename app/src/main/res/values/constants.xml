@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="value_highscore_default">999</integer>
+    <integer name="value_highscore_theshold">10</integer>
 
 </resources>
