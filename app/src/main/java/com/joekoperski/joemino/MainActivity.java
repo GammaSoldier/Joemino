@@ -1,3 +1,4 @@
+// FIXME: 07.09.2018 memory usage3 (up to 200 MB)
 // TODO splash screen
 // TODO graphical redesign
 // TODO define screen positions for all GUI elements in fractions of screen size
@@ -6,6 +7,8 @@
 package com.joekoperski.joemino;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,6 +18,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -31,9 +35,9 @@ import static android.util.TypedValue.COMPLEX_UNIT_FRACTION;
 
 public class MainActivity extends Activity {
 
-    private static final int SOUND_CLICK = 0;
-    private static final int SOUND_VICTORY = 1;
-    private static final int SOUND_GAMEOVER = 2;
+    private final static int SOUND_CLICK = 0;
+    private final static int SOUND_VICTORY = 1;
+    private final static int SOUND_GAMEOVER = 2;
 
     private GameView gameView;
     private Playfield playfield;
@@ -72,12 +76,16 @@ public class MainActivity extends Activity {
 
         gameLayout = new FrameLayout(this);
 
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+//        options.inPreferredConfig = Bitmap.Config.RGB_565;
         // title
-        BitmapFactory titleBitmapFactory = new BitmapFactory();
-        Bitmap titleBitmap = titleBitmapFactory.decodeResource(getResources(), R.drawable.title);
-        double zoomfactor = (displaySize.y * 0.1375d) / titleBitmap.getHeight();
 
-        int width = (int) (titleBitmap.getWidth() * zoomfactor);
+        BitmapFactory titleBitmapFactory = new BitmapFactory();
+        titleBitmapFactory.decodeResource(getResources(), R.drawable.title, options);
+        double zoomfactor = (displaySize.y * 0.1375d) / options.outHeight;
+
+        int width = (int) (options.outWidth * zoomfactor);
         int height = (int) (displaySize.y * 0.1375d);
         layoutTitleView = new RelativeLayout(this);
 
@@ -99,7 +107,7 @@ public class MainActivity extends Activity {
         height = (int)(displaySize.y / 22d);
         int x = displaySize.x / 2;
         scoreView = new BitmapTextView(this);
-        scoreView.init(width, height, R.drawable.score_display_right, "fonts/SHOWG.TTF");
+        scoreView.init(this, width, height, R.drawable.score_display_right, "fonts/SHOWG.TTF");
         scoreView.setTextColor(Color.WHITE);
         scoreView.setText("0");
         scoreView.setTextSize(COMPLEX_UNIT_FRACTION, 70);
@@ -107,7 +115,7 @@ public class MainActivity extends Activity {
         scoreView.setY((int) (displaySize.y * 0.1375d));
 
         scoreTextView = new BitmapTextView(this);
-        scoreTextView.init(width, height, R.drawable.score_display_left, "fonts/SHOWG.TTF");
+        scoreTextView.init(this, width, height, R.drawable.score_display_left, "fonts/SHOWG.TTF");
         scoreTextView.setTextColor(Color.WHITE);
         scoreTextView.setText(R.string.str_score_text);
         scoreTextView.setTextSize(COMPLEX_UNIT_FRACTION, 70);
@@ -121,13 +129,14 @@ public class MainActivity extends Activity {
         layoutGameButtons = new RelativeLayout(this);
 
         BitmapFactory buttonBitmapFactory = new BitmapFactory();
-        Bitmap buttonBitmap = buttonBitmapFactory.decodeResource(getResources(), R.drawable.button_new_normal);
-        zoomfactor = (displaySize.y * 0.1375d) / buttonBitmap.getHeight();
-        Point buttonSize = new Point((int) (buttonBitmap.getWidth() * zoomfactor), (int) (buttonBitmap.getHeight() * zoomfactor));
+        Bitmap buttonBitmap = buttonBitmapFactory.decodeResource(getResources(), R.drawable.button_new_normal, options);
+        zoomfactor = (displaySize.y * 0.1375d) / options.outHeight;
+        Point buttonSize = new Point((int) (options.outWidth * zoomfactor), (int) (options.outHeight * zoomfactor));
 
         Point position;
 
         // Button New
+        // FIXME: 07.09.2018 consumes 19 MB
         position = new Point(0, displaySize.y - buttonSize.y);
         SizedImageButton buttonNew = new SizedImageButton(this, R.drawable.button_new_images, buttonSize, position);
         buttonNew.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +146,7 @@ public class MainActivity extends Activity {
         });
 
         // Button Score
+        // FIXME: 07.09.2018 consumes 19 MB
         position = new Point((displaySize.x - buttonSize.x) / 2, displaySize.y - buttonSize.y);
         SizedImageButton buttonScore = new SizedImageButton(this, R.drawable.button_score_images, buttonSize, position);
         buttonScore.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +165,7 @@ public class MainActivity extends Activity {
         });
 
         // Button Exit
+        // FIXME: 07.09.2018 consumes 19 MB
         position = new Point(displaySize.x - buttonSize.x, displaySize.y - buttonSize.y);
         SizedImageButton buttonExit = new SizedImageButton(this, R.drawable.button_exit_images, buttonSize, position);
         buttonExit.setOnClickListener(new View.OnClickListener() {
@@ -238,6 +249,7 @@ public class MainActivity extends Activity {
     public void TileTouched(int x, int y) {
         Boolean isHighscore = false;
         Log.d("MainActivity", "TileTouched");
+
         int moveResult;
 
         moveResult = gameRules.makeMove(playfield, x, y);
@@ -281,6 +293,7 @@ public class MainActivity extends Activity {
             default:    // FORBIDDEN
                 // do nothing
         }// switch
+//        memInfo();
     }// TileTouched
 
 
@@ -332,4 +345,29 @@ public class MainActivity extends Activity {
     private void PlaySound(int id) {
         soundPool.play(sm[id], 1, 1, 1, 0, 1f);
     }
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    private void memInfo() {
+        int pids[];
+        int id = android.os.Process.myPid();
+
+        pids = new int[1];
+        pids[0] = id;
+
+        Debug.MemoryInfo memInfo[];
+
+        ActivityManager AM = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+
+        AM.getMemoryInfo(memoryInfo);
+        memInfo = AM.getProcessMemoryInfo (pids);
+
+        int memory;
+        memory = (int) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
+        int memoryClass;
+        memoryClass = AM.getMemoryClass();
+    }// memInfo
+
 }// MainActivity

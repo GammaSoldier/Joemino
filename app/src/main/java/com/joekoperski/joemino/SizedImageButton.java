@@ -1,6 +1,8 @@
 package com.joekoperski.joemino;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -13,6 +15,7 @@ class SizedImageButton extends ImageButton {
         super(context);
 
         RelativeLayout.LayoutParams layoutButtonNew = new RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        // FIXME: 07.09.2018 consumes 20 MB
         setImageResource(resource);
         setBackgroundColor(0); // transparent
 

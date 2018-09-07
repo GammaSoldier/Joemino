@@ -75,10 +75,15 @@ public class GameView extends SurfaceView implements Callback {
 
         // Prapare graphics
         Bitmap bmpTemp;
+        // FIXME: 07.09.2018 consumes 40 MB
         bmpTemp = BitmapFactory.decodeResource(getResources(), R.drawable.background);
         bmpBackground = Bitmap.createScaledBitmap(bmpTemp, getWidth(), getHeight(), true);
+        bmpTemp.recycle();
+
+        // FIXME: 07.09.2018 consumes 50 MB
         bmpTemp = BitmapFactory.decodeResource(getResources(), R.drawable.playfield);
         bmpPlayfieldBackground = Bitmap.createScaledBitmap(bmpTemp, mPlayfieldScreen.x, mPlayfieldScreen.y, true);
+        bmpTemp.recycle();
 
         bmpTiles = new Bitmap[5];
         bmpTiles[0] = BitmapFactory.decodeResource(getResources(), R.drawable.glass1);
@@ -261,6 +266,8 @@ public class GameView extends SurfaceView implements Callback {
             return false;
         }// if
 
+//        background.recycle();
+
         return true;
     }
 
@@ -268,10 +275,10 @@ public class GameView extends SurfaceView implements Callback {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     private Boolean animateTileMoveVertical(Canvas canvas, Playfield playfield, int posX, int posY, int tileSizeX, int tileSizeY, int animationStep) {
         int tileOffsetY = (int) (tileSizeY * (double) animationStep / SMOOTH_ANIMATION_STEPS);
-
+        Bitmap background = null;
         // erase source area only if no upper neighbour
         if (playfield.Get(posX, posY - 1) == -1) {
-            Bitmap background = Bitmap.createBitmap(bmpPlayfieldBackground, posX * tileSizeX, posY * tileSizeY, tileSizeX, tileSizeY);
+            background = Bitmap.createBitmap(bmpPlayfieldBackground, posX * tileSizeX, posY * tileSizeY, tileSizeX, tileSizeY);
             canvas.drawBitmap(background, null, new Rect(posX * tileSizeX, posY * tileSizeY, (posX + 1) * tileSizeX, (posY + 1) * tileSizeY), null);
         }// if
 
@@ -285,6 +292,13 @@ public class GameView extends SurfaceView implements Callback {
             playfield.Set(posX, posY + 1, playfield.Get(posX, posY));
             playfield.Set(posX, posY, -1);
         }// if
+
+/*
+        if( background != null ) {
+            background.recycle();
+        }
+*/
+
         return true;
     }
 
@@ -293,9 +307,10 @@ public class GameView extends SurfaceView implements Callback {
     private Boolean animateTileMoveHorizontal(Canvas canvas, Playfield playfield, int posX, int posY, int tileSizeX, int tileSizeY, int animationStep) {
         int tileOffsetX = (int) (tileSizeX * (double) animationStep / SMOOTH_ANIMATION_STEPS);
         int tmp;
+        Bitmap background = null;
         // erase source area only if no left neighbour
         if (playfield.Get(posX - 1, posY) == -1) {
-            Bitmap background = Bitmap.createBitmap(bmpPlayfieldBackground, posX * tileSizeX, posY * tileSizeY, tileSizeX, tileSizeY);
+            background = Bitmap.createBitmap(bmpPlayfieldBackground, posX * tileSizeX, posY * tileSizeY, tileSizeX, tileSizeY);
             canvas.drawBitmap(background, null, new Rect(posX * tileSizeX, posY * tileSizeY, (posX + 1) * tileSizeX, (posY + 1) * tileSizeY), null);
         }// if
 
@@ -309,6 +324,13 @@ public class GameView extends SurfaceView implements Callback {
             playfield.Set(posX + 1, posY, playfield.Get(posX, posY));
             playfield.Set(posX, posY, -1);
         }// if
+
+/*
+        if( background != null ) {
+            background.recycle();
+        }
+*/
+
         return true;
     }
 

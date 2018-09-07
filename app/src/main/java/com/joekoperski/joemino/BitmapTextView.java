@@ -8,17 +8,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 class BitmapTextView extends TextView {
-    private Context mContext;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     BitmapTextView(Context context) {
         super(context);
-        mContext = context;
     }// BitmapTextView
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public void init(int width, int height, int resourceId, String fontLocation) {
-        Typeface font = Typeface.createFromAsset(mContext.getAssets(), fontLocation);
+    public void init(Context context,int width, int height, int resourceId, String fontLocation) {
+        Typeface font = Typeface.createFromAsset(context.getAssets(), fontLocation);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
         setLayoutParams(params);
