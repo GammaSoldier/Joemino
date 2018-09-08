@@ -88,7 +88,6 @@ public class DlgScores extends Dialog {
                 setThresholdEntryColor(viewId[i][j], score);
             }// for j
         }// for i
-
     }// initList
 
 
@@ -97,6 +96,9 @@ public class DlgScores extends Dialog {
         if (score < parent.getResources().getInteger(R.integer.value_highscore_theshold)) {
             ((TextView) findViewById(id)).setTextColor(Color.rgb(255, 120, 255));
         }// if
+        else {
+            ((TextView) findViewById(id)).setTextColor(Color.rgb(255, 255, 255));
+        }// else
     }// setThresholdEntryColor
 }// DlgScores
 
