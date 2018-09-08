@@ -15,7 +15,7 @@ class BitmapTextView extends TextView {
     }// BitmapTextView
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public void init(Context context,int width, int height, int resourceId, String fontLocation) {
+    public void init(Context context,int width, int height, int resourceId, String fontLocation,int alingnHorizontal) {
         Typeface font = Typeface.createFromAsset(context.getAssets(), fontLocation);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
@@ -24,8 +24,8 @@ class BitmapTextView extends TextView {
         setBackgroundColor(Color.TRANSPARENT);
         setBackgroundResource(resourceId);
 
-        setPadding(0, 0, 0, 0);
-        setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        setPadding(10, 0, 10, 0);
+        setGravity(alingnHorizontal | Gravity.CENTER_VERTICAL);
 
         setTypeface(font);
     }// init

@@ -20,7 +20,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -31,6 +33,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import static android.util.TypedValue.COMPLEX_UNIT_FRACTION;
+import static android.util.TypedValue.COMPLEX_UNIT_PX;
+import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
 
 public class MainActivity extends Activity {
@@ -106,19 +110,22 @@ public class MainActivity extends Activity {
         width = (int) (displaySize.x * 5d / 20);
         height = (int)(displaySize.y / 22d);
         int x = displaySize.x / 2;
+//        float screenDensity = getResources().getDisplayMetrics().density;
+        float myTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18F, getResources().getDisplayMetrics());
         scoreView = new BitmapTextView(this);
-        scoreView.init(this, width, height, R.drawable.score_right, "fonts/SHOWG.TTF");
+        scoreView.init(this, width, height, R.drawable.score_right, "fonts/SHOWG.TTF", Gravity.LEFT);
         scoreView.setTextColor(Color.WHITE);
         scoreView.setText("0");
-        scoreView.setTextSize(COMPLEX_UNIT_FRACTION, 70);
+        scoreView.setTextSize(COMPLEX_UNIT_PX, myTextSize);
         scoreView.setX(x);
         scoreView.setY((int) (displaySize.y * 0.1375d));
 
         scoreTextView = new BitmapTextView(this);
-        scoreTextView.init(this, width, height, R.drawable.score_left, "fonts/SHOWG.TTF");
+        scoreTextView.init(this, width, height, R.drawable.score_left, "fonts/SHOWG.TTF", Gravity.RIGHT);
         scoreTextView.setTextColor(Color.WHITE);
         scoreTextView.setText(R.string.str_score_text);
-        scoreTextView.setTextSize(COMPLEX_UNIT_FRACTION, 70);
+        scoreTextView.setTextSize(COMPLEX_UNIT_PX, myTextSize);
+
         scoreTextView.setX(x - width);
         scoreTextView.setY((int) (displaySize.y * 0.1375d));
 
