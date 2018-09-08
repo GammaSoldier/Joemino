@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical|center_horizontal"
-        android:text="Highscore"
+        android:text="@string/str_highscore"
         android:textColor="@android:color/holo_orange_light"
         android:textSize="30sp"
         android:textStyle="bold" />
@@ -21,7 +21,7 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:background="@android:color/white" />
+        android:background="@drawable/bar" />
 
     <TextView
         android:id="@+id/textView"
@@ -37,23 +37,29 @@
         android:layout_width="match_parent"
         android:layout_height="57dp"
         android:gravity="center_vertical|center_horizontal"
-        android:text="TextView"
+        android:text="@string/str_yourscore"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
 
     <EditText
         android:id="@+id/editName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="46dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:background="#ffffff"
         android:ems="10"
+        android:gravity="center"
+        android:hint="@string/str_highscore_hint"
         android:inputType="textPersonName"
         android:text=""
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/black" />
 
     <Button
         android:id="@+id/buttonOK"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:text="OK" />
+        android:text="@string/str_ok"
+        android:textColor="@android:color/white" />
 </LinearLayout>

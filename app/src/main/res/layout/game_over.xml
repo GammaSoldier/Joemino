@@ -11,15 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical|center_horizontal"
-        android:text="Sorry"
+        android:text="@string/str_sorry"
         android:textColor="@android:color/holo_orange_light"
         android:textSize="30sp"
         android:textStyle="bold" />
+
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:background="@android:color/white" />
+        android:background="@drawable/bar" />
 
     <TextView
         android:id="@+id/textView2"
@@ -35,6 +36,6 @@
         android:id="@+id/buttonOK"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="OK"
+        android:text="@string/str_ok"
         android:textColor="@android:color/white" />
 </LinearLayout>

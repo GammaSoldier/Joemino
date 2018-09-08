@@ -107,7 +107,7 @@ public class MainActivity extends Activity {
         height = (int)(displaySize.y / 22d);
         int x = displaySize.x / 2;
         scoreView = new BitmapTextView(this);
-        scoreView.init(this, width, height, R.drawable.score_display_right, "fonts/SHOWG.TTF");
+        scoreView.init(this, width, height, R.drawable.score_right, "fonts/SHOWG.TTF");
         scoreView.setTextColor(Color.WHITE);
         scoreView.setText("0");
         scoreView.setTextSize(COMPLEX_UNIT_FRACTION, 70);
@@ -115,7 +115,7 @@ public class MainActivity extends Activity {
         scoreView.setY((int) (displaySize.y * 0.1375d));
 
         scoreTextView = new BitmapTextView(this);
-        scoreTextView.init(this, width, height, R.drawable.score_display_left, "fonts/SHOWG.TTF");
+        scoreTextView.init(this, width, height, R.drawable.score_left, "fonts/SHOWG.TTF");
         scoreTextView.setTextColor(Color.WHITE);
         scoreTextView.setText(R.string.str_score_text);
         scoreTextView.setTextSize(COMPLEX_UNIT_FRACTION, 70);

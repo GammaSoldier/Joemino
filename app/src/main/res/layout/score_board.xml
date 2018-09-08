@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical|center_horizontal"
-        android:text="Hall of Fame"
+        android:text="@string/str_highscore_header"
         android:textColor="@android:color/holo_orange_light"
         android:textSize="30sp"
         android:textStyle="bold" />
@@ -21,7 +21,7 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:background="@android:color/white" />
+        android:background="@drawable/bar" />
 
     <TableRow
         android:layout_width="match_parent"
@@ -244,8 +244,8 @@
             android:id="@+id/buttonDel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:text="Delete Scores" />
+            android:text="@string/str_highscore_delete"
+            android:textColor="@android:color/white" />
 
     </TableRow>
 
@@ -258,8 +258,8 @@
             android:id="@+id/buttonOK"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:text="OK" />
+            android:text="@string/str_ok"
+            android:textColor="@android:color/white" />
     </TableRow>
 
 </LinearLayout>

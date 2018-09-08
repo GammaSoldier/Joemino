@@ -9,10 +9,15 @@
     <string name="str_highscores">Highscores</string>
     <string name="str_highscore_entry_default_text">Try to beat this</string>
     <string name="str_highscore">Highscore</string>
+    <string name="str_highscore_header">Hall of fame</string>
+    <string name="str_highscore_delete">Delete highscores</string>
     <string name="str_yourscore">Your Score:   %1$d </string>
     <string name="str_gameover">Game Over</string>
     <string name="str_grats">Well done</string>
     <string name="str_score_text">Tiles:</string>
+    <string name="str_highscore_hint">Your name</string>
+    <string name="str_ok">OK</string>
+    <string name="str_sorry">Sorry</string>
 
 
 </resources>
