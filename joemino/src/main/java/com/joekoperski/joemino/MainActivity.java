@@ -5,8 +5,6 @@ package com.joekoperski.joemino;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,9 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import static android.util.TypedValue.COMPLEX_UNIT_FRACTION;
 import static android.util.TypedValue.COMPLEX_UNIT_PX;
-import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
 
 public class MainActivity extends Activity {
@@ -197,6 +193,7 @@ public class MainActivity extends Activity {
                     .build();
         }// if
         else {
+
             //noinspection deprecation
             soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
         }// else
