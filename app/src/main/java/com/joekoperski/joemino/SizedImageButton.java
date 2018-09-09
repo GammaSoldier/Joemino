@@ -15,7 +15,6 @@ class SizedImageButton extends ImageButton {
         super(context);
 
         RelativeLayout.LayoutParams layoutButtonNew = new RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
-        // FIXME: 07.09.2018 consumes 20 MB
         setImageResource(resource);
         setBackgroundColor(0); // transparent
 

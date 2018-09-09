@@ -75,12 +75,10 @@ public class GameView extends SurfaceView implements Callback {
 
         // Prapare graphics
         Bitmap bmpTemp;
-        // FIXME: 07.09.2018 consumes 40 MB
         bmpTemp = BitmapFactory.decodeResource(getResources(), R.drawable.background);
         bmpBackground = Bitmap.createScaledBitmap(bmpTemp, getWidth(), getHeight(), true);
         bmpTemp.recycle();
 
-        // FIXME: 07.09.2018 consumes 50 MB
         bmpTemp = BitmapFactory.decodeResource(getResources(), R.drawable.playfield);
         bmpPlayfieldBackground = Bitmap.createScaledBitmap(bmpTemp, mPlayfieldScreen.x, mPlayfieldScreen.y, true);
         bmpTemp.recycle();

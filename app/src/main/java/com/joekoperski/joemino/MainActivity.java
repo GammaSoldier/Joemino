@@ -1,6 +1,3 @@
-// FIXME: 07.09.2018 memory usage3 (up to 200 MB)
-// TODO splash screen
-// TODO graphical redesign
 // TODO define screen positions for all GUI elements in fractions of screen size
 // TODO Release Version
 
@@ -9,6 +6,7 @@ package com.joekoperski.joemino;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -110,7 +108,6 @@ public class MainActivity extends Activity {
         width = (int) (displaySize.x * 5d / 20);
         height = (int)(displaySize.y / 22d);
         int x = displaySize.x / 2;
-//        float screenDensity = getResources().getDisplayMetrics().density;
         float myTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18F, getResources().getDisplayMetrics());
         scoreView = new BitmapTextView(this);
         scoreView.init(this, width, height, R.drawable.score_right, "fonts/SHOWG.TTF", Gravity.LEFT);
@@ -143,7 +140,6 @@ public class MainActivity extends Activity {
         Point position;
 
         // Button New
-        // FIXME: 07.09.2018 consumes 19 MB
         position = new Point(0, displaySize.y - buttonSize.y);
         SizedImageButton buttonNew = new SizedImageButton(this, R.drawable.button_new_images, buttonSize, position);
         buttonNew.setOnClickListener(new View.OnClickListener() {
@@ -153,7 +149,6 @@ public class MainActivity extends Activity {
         });
 
         // Button Score
-        // FIXME: 07.09.2018 consumes 19 MB
         position = new Point((displaySize.x - buttonSize.x) / 2, displaySize.y - buttonSize.y);
         SizedImageButton buttonScore = new SizedImageButton(this, R.drawable.button_score_images, buttonSize, position);
         buttonScore.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +167,6 @@ public class MainActivity extends Activity {
         });
 
         // Button Exit
-        // FIXME: 07.09.2018 consumes 19 MB
         position = new Point(displaySize.x - buttonSize.x, displaySize.y - buttonSize.y);
         SizedImageButton buttonExit = new SizedImageButton(this, R.drawable.button_exit_images, buttonSize, position);
         buttonExit.setOnClickListener(new View.OnClickListener() {
@@ -203,6 +197,7 @@ public class MainActivity extends Activity {
                     .build();
         }// if
         else {
+            //noinspection deprecation
             soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
         }// else
         // set volume control to "media" when changing volume
